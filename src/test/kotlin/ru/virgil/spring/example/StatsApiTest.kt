@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
-import ru.virgil.spring.example.stats.StatsDto
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.stats.StatsDto
 import ru.virgil.spring.tools.testing.fluent.Fluent
 
 @DirtiesContext

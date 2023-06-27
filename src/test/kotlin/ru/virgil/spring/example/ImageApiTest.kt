@@ -21,14 +21,14 @@ import ru.virgil.spring.tools.testing.UriHelper
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import java.util.*
 
-private const val imageMimeTypePattern = "static/image/"
+private const val imageMimeTypePattern = "image/"
 
 @DirtiesContext
 @SpringBootTest
 @ComponentScan("ru.virgil.spring")
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class FileImageApiTest @Autowired constructor(
+class ImageApiTest @Autowired constructor(
     val fluent: Fluent,
     val imageMockService: ImageMockService,
     val imageService: ImageService,
@@ -39,7 +39,7 @@ class FileImageApiTest @Autowired constructor(
     @Test
     fun postPrivateImage() {
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
-            post { "/static/image/private" }
+            post { "/image/private" }
             file { imageMockService.mockAsMultipart() }
         }
         privateImageFileDto.shouldNotBeNull()
@@ -49,7 +49,7 @@ class FileImageApiTest @Autowired constructor(
     @Test
     fun getPrivateImage() {
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
-            post { "/static/image/private" }
+            post { "/image/private" }
             file { imageMockService.mockAsMultipart() }
         }
         privateImageFileDto.shouldNotBeNull()
@@ -61,14 +61,14 @@ class FileImageApiTest @Autowired constructor(
     @WithMockFirebaseUser
     @Test
     fun getProtectedImage() {
-        val byteArray: ByteArray = fluent.request { get { "/static/image/protected/image.jpg" } }
+        val byteArray: ByteArray = fluent.request { get { "/image/protected/image.jpg" } }
         fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
     @Test
     fun getPublicImage() {
-        val byteArray: ByteArray = fluent.request { get { "/static/image/public/image.jpg" } }
+        val byteArray: ByteArray = fluent.request { get { "/image/public/image.jpg" } }
         fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
@@ -77,11 +77,11 @@ class FileImageApiTest @Autowired constructor(
     @Test
     fun getNotExisting() {
         fluent.request<Any> {
-            get { "/static/image/public/not_existing.jpg" }
+            get { "/image/public/not_existing.jpg" }
             expect { status().isNotFound }
         }
         fluent.request<Any> {
-            get { "/static/image/protected/not_existing.jpg" }
+            get { "/image/protected/not_existing.jpg" }
             expect { status().isNotFound }
         }
         fluent.request<Any> {
