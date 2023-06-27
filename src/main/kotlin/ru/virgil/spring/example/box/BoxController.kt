@@ -5,12 +5,12 @@ import jakarta.persistence.*
 import org.springframework.security.access.prepost.PostAuthorize
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import ru.virgil.spring.example.security.Cors
+import ru.virgil.spring.example.security.DefaultCors
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckService
 import java.util.*
 
-@Cors
+@DefaultCors
 @RestController
 @RequestMapping("/box")
 class BoxController(

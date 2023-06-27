@@ -1,3 +1,5 @@
+@file:Suppress("RedundantSuppression")
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -16,6 +18,7 @@ repositories {
     mavenCentral()
 }
 
+@Suppress("SpellCheckingInspection")
 dependencies {
 
     // Модуль инструментов Spring

@@ -6,4 +6,4 @@ import org.springframework.web.bind.annotation.CrossOrigin
     origins = ["http://localhost:4200/"],
     allowCredentials = true.toString()
 )
-annotation class Cors
+annotation class DefaultCors

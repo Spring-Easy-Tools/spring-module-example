@@ -5,10 +5,8 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import org.springframework.security.core.userdetails.UserDetails
 import ru.virgil.spring.example.security.SecurityUser
 import ru.virgil.spring.example.truck.Truck
-
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned
 import ru.virgil.spring.tools.util.data.Soft

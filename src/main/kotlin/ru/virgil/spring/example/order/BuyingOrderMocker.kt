@@ -1,42 +1,26 @@
 package ru.virgil.spring.example.order
 
 import net.datafaker.Faker
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
-import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import ru.virgil.spring.example.mock.EntityMocker
 import ru.virgil.spring.example.mock.MockAuthSuccessHandler
-import ru.virgil.spring.example.mock.MockerUtils
-import ru.virgil.spring.example.truck.TruckRepository
+import ru.virgil.spring.example.truck.TruckMocker
 
 @Lazy
 @Component
 class BuyingOrderMocker(
-    private val mockAuthSuccessHandler: MockAuthSuccessHandler,
+    override val authHandler: MockAuthSuccessHandler,
+    override val repository: BuyingOrderMockerRepository,
+    private val truckMocker: TruckMocker,
     private val faker: Faker,
-    private val buyingOrderRepository: BuyingOrderRepository,
-    private val truckRepository: TruckRepository,
-) : MockerUtils {
+) : EntityMocker<BuyingOrder> {
 
-    @Lazy
-    @Bean(new)
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun new(): BuyingOrder {
-        val truck = truckRepository.findPriorityOrGetRandom { it.buyingOrder.isEmpty() }
+    override fun new(): BuyingOrder {
+        val truck = truckMocker.repository.findFirstByBuyingOrderIsEmpty() ?: truckMocker.random()
         return BuyingOrder(truck, faker.ancient().hero())
-            .also { it.createdBy = mockAuthSuccessHandler.principal }
+            .also { it.createdBy = principal }
     }
 
-    @Lazy
-    @Bean(random)
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun random(): BuyingOrder = buyingOrderRepository.findAllByCreatedBy(mockAuthSuccessHandler.principal).random()
-
-    companion object {
-
-        private const val name = "buying-order"
-        const val new = "new-$name"
-        const val random = "random-$name"
-    }
+    override fun random(): BuyingOrder = repository.findAllByCreatedBy(principal).random()
 }

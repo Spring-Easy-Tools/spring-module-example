@@ -7,9 +7,7 @@ import io.kotest.matchers.floats.shouldBeGreaterThanOrEqual
 import net.datafaker.Faker
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
@@ -34,8 +32,7 @@ class BoxApiTest @Autowired constructor(
     override val assertUtils: AssertUtils,
     val faker: Faker,
     val fluent: Fluent,
-    @Qualifier(BoxMocker.random)
-    val randomBoxProvider: ObjectProvider<Box>,
+    val boxMocker: BoxMocker,
     val boxService: BoxService,
 ) : UriHelper, PartialMatcher {
 
@@ -82,7 +79,7 @@ class BoxApiTest @Autowired constructor(
     @Test
     fun edit() {
         val testDto = BoxDto(type = BoxType.USUAL, description = "EDITED", price = 78434, weight = 456f)
-        val randomBox = randomBoxProvider.getObject()
+        val randomBox = boxMocker.random()
         val changedDto: BoxDto = fluent.request {
             put { "/box/${randomBox.uuid}" }
             send { testDto }
@@ -94,7 +91,7 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun delete() {
-        val box = randomBoxProvider.getObject()
+        val box = boxMocker.random()
         fluent.request<Any> { delete { "/box/${box.uuid}" } }
         fluent.request<Any> {
             get { "/box/${box.uuid}" }

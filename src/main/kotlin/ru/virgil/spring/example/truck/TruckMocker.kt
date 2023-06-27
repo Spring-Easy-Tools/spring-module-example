@@ -1,31 +1,18 @@
 package ru.virgil.spring.example.truck
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
-import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import ru.virgil.spring.example.mock.MockerUtils
-import java.util.*
+import ru.virgil.spring.example.mock.EntityMocker
+import ru.virgil.spring.example.mock.MockAuthSuccessHandler
 
 @Lazy
 @Component
 class TruckMocker(
-    private val truckRepository: TruckRepository,
-) : MockerUtils {
+    override val repository: TruckMockerRepository,
+    override val authHandler: MockAuthSuccessHandler,
+) : EntityMocker<Truck> {
 
-    @Bean(new)
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun new(): Truck = Truck()
+    override fun new(): Truck = Truck()
 
-    @Bean(random)
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun random(): Truck = truckRepository.findAll().random()
-
-    companion object {
-
-        private const val name = "truck"
-        const val new = "new-$name"
-        const val random = "random-$name"
-    }
+    override fun random(): Truck = repository.findAll().toList().random()
 }

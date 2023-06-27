@@ -1,15 +1,10 @@
 package ru.virgil.spring.example.user
 
-import jakarta.persistence.Entity
-import jakarta.persistence.EntityListeners
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.OneToOne
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import org.springframework.security.core.userdetails.UserDetails
 import ru.virgil.spring.example.security.SecurityUser
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned

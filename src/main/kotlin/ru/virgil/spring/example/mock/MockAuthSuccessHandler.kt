@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component
 import ru.virgil.spring.example.security.SecurityUser
 
 @Component
-class MockAuthSuccessHandler(val mocker: Mocker, val context: ApplicationContext) {
+class MockAuthSuccessHandler(val mockGenerator: MockGenerator, val context: ApplicationContext) {
 
     lateinit var principal: SecurityUser
 
     @EventListener
     fun onSuccess(success: AuthenticationSuccessEvent?) {
         principal = success!!.authentication.principal as SecurityUser
-        mocker.start()
+        mockGenerator.start(principal)
     }
 }
