@@ -14,7 +14,7 @@ import ru.virgil.spring.tools.testing.fluent.Fluent
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan("ru.virgil.spring")
+@ComponentScan(basePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,5 +31,4 @@ class StatsApiTest @Autowired constructor(val fluent: Fluent) {
         val statsDto: StatsDto = fluent.request { get { "/stats/my" } }
         statsDto.shouldNotBeNull()
     }
-
 }

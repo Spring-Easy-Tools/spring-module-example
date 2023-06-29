@@ -1,13 +1,18 @@
-package ru.virgil.spring.example.system
+package ru.virgil.spring.example.ping
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import ru.virgil.spring.example.security.DefaultCors
 
+@DefaultCors
 @RestController
 @RequestMapping("/ping")
 class PingController {
 
     @GetMapping
-    fun ping() = "Pong"
+    fun pingAnonymous() = Unit
+
+    @GetMapping("/auth")
+    fun pingAuth() = Unit
 }

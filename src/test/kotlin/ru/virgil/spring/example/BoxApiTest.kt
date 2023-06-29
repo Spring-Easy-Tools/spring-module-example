@@ -24,7 +24,7 @@ import ru.virgil.spring.tools.testing.fluent.Fluent
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan("ru.virgil.spring")
+@ComponentScan(basePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

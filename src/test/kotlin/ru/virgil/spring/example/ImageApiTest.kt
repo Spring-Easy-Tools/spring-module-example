@@ -25,7 +25,7 @@ private const val imageMimeTypePattern = "image/"
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan("ru.virgil.spring")
+@ComponentScan(basePackage)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ImageApiTest @Autowired constructor(
