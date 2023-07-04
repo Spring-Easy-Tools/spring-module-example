@@ -6,6 +6,9 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.stereotype.Component
 import ru.virgil.spring.example.security.SecurityUser
 
+/**
+ * Этот хендлер отвечает за запуск генератора моков после прохождения авторизации
+ * */
 @Component
 class MockAuthSuccessHandler(val mockGenerator: MockGenerator, val context: ApplicationContext) {
 
@@ -13,7 +16,11 @@ class MockAuthSuccessHandler(val mockGenerator: MockGenerator, val context: Appl
 
     @EventListener
     fun onSuccess(success: AuthenticationSuccessEvent?) {
-        principal = success!!.authentication.principal as SecurityUser
+        // TODO: ForbiddenToken, несмотря на isAuthenticated = false, все равно приходит сюда,
+        //    поэтому дополнительно отслеживаем
+        if (!success!!.authentication.isAuthenticated) return
+        principal = success.authentication.principal as SecurityUser
+        // TODO: Вынести логику управления запуском мокера сюда
         mockGenerator.start(principal)
     }
 }

@@ -9,7 +9,7 @@ const val basePackage = "ru.virgil.spring"
 
 @SpringBootApplication(scanBasePackages = [basePackage])
 @EnableJpaAuditing
-@ConfigurationPropertiesScan
+@ConfigurationPropertiesScan(basePackages = [basePackage])
 class SpringExampleApplication
 
 fun main(args: Array<String>) {
