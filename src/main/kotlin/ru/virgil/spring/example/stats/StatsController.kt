@@ -7,11 +7,10 @@ import ru.virgil.spring.example.box.BoxRepository
 import ru.virgil.spring.example.box.BoxService
 import ru.virgil.spring.example.order.BuyingOrderRepository
 import ru.virgil.spring.example.order.BuyingOrderService
-import ru.virgil.spring.example.security.DefaultCors
 import ru.virgil.spring.example.truck.TruckRepository
-import security.cors.DefaultCorsJava
+import ru.virgil.spring.tools.security.cors.GlobalCors
 
-@DefaultCorsJava
+@GlobalCors
 @RestController
 @RequestMapping("/stats")
 class StatsController(

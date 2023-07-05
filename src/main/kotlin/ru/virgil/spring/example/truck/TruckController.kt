@@ -5,10 +5,10 @@ import ru.virgil.spring.example.box.BoxDto
 import ru.virgil.spring.example.box.BoxMapper
 import ru.virgil.spring.example.box.BoxService
 import ru.virgil.spring.example.system.rest.RestValues
-import security.cors.DefaultCorsJava
+import ru.virgil.spring.tools.security.cors.GlobalCors
 import java.util.*
 
-@DefaultCorsJava
+@GlobalCors
 @RestController
 @RequestMapping("/truck")
 class TruckController(

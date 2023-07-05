@@ -6,10 +6,10 @@ import ru.virgil.spring.example.system.rest.RestValues.pageSizeParam
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.example.truck.TruckMapper
 import ru.virgil.spring.example.truck.TruckService
-import security.cors.DefaultCorsJava
+import ru.virgil.spring.tools.security.cors.GlobalCors
 import java.util.*
 
-@DefaultCorsJava
+@GlobalCors
 @RestController
 @RequestMapping("/buying_order")
 class BuyingOrderController(
