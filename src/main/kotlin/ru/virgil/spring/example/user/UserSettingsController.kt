@@ -2,8 +2,9 @@ package ru.virgil.spring.example.user
 
 import org.springframework.web.bind.annotation.*
 import ru.virgil.spring.example.security.DefaultCors
+import security.cors.DefaultCorsJava
 
-@DefaultCors
+@DefaultCorsJava
 @RestController
 @RequestMapping("/user_settings")
 class UserSettingsController(

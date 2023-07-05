@@ -9,8 +9,9 @@ import ru.virgil.spring.example.order.BuyingOrderRepository
 import ru.virgil.spring.example.order.BuyingOrderService
 import ru.virgil.spring.example.security.DefaultCors
 import ru.virgil.spring.example.truck.TruckRepository
+import security.cors.DefaultCorsJava
 
-@DefaultCors
+@DefaultCorsJava
 @RestController
 @RequestMapping("/stats")
 class StatsController(

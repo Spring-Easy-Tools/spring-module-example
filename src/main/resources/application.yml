@@ -35,8 +35,9 @@ spring:
       ddl-auto: create
 
 security:
-  cors-origins:
-    - http://localhost:4200
+  cors:
+    origins:
+      - http://localhost:4200
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"

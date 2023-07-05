@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.*
 import ru.virgil.spring.example.security.DefaultCors
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckService
+import security.cors.DefaultCorsJava
 import java.util.*
 
-@DefaultCors
+@DefaultCorsJava
 @RestController
 @RequestMapping("/box")
 class BoxController(
