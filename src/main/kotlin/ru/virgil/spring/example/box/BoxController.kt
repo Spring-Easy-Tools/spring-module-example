@@ -20,11 +20,10 @@ class BoxController(
 ) : BoxMapper {
 
     @GetMapping
-    fun getAll(
-        @RequestParam(RestValues.pageParam) page: Int, @RequestParam(RestValues.pageSizeParam) size: Int,
-    ): List<BoxDto> = boxService.getAll(page, size).stream()
-        .map { it.toDto() }
-        .toList()
+    fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int): List<BoxDto> =
+        boxService.getAll(page, size).stream()
+            .map { it.toDto() }
+            .toList()
 
     @RolesAllowed("ROLE_POLICE")
     @GetMapping("/weapons")

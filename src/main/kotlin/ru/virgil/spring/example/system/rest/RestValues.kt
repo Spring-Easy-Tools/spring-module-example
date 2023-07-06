@@ -7,7 +7,7 @@ package ru.virgil.spring.example.system.rest
  */
 object RestValues {
 
-    const val pageParam = "page"
-    const val pageSizeParam = "size"
+    const val page = "page"
+    const val size = "size"
 
 }

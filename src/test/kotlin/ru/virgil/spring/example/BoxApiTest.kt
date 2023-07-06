@@ -37,12 +37,12 @@ class BoxApiTest @Autowired constructor(
 ) : UriHelper, PartialMatcher {
 
     private val page = 0
-    private val pageSize = 10
+    private val size = 10
 
     @Test
     fun getAll() {
         val boxDtoList: MutableList<BoxDto> = fluent.request {
-            get { "/box?${RestValues.pageParam}=$page&${RestValues.pageSizeParam}=$pageSize" }
+            get { "/box?${RestValues.page}=$page&${RestValues.size}=$size" }
         }
         boxDtoList.shouldNotBeEmpty()
     }
@@ -125,7 +125,7 @@ class BoxApiTest @Autowired constructor(
     @Test
     fun getAllWeaponsByUsualUser() {
         fluent.request<Any> {
-            get { "/box/weapons?${RestValues.pageParam}=$page&${RestValues.pageSizeParam}=$pageSize" }
+            get { "/box/weapons?${RestValues.page}=$page&${RestValues.size}=$size" }
             expect { status().isForbidden }
         }
     }
@@ -140,7 +140,7 @@ class BoxApiTest @Autowired constructor(
         }
         serverDto shouldBePartialEquals testDto
         val weaponDtoList: List<BoxDto> = fluent.request {
-            get { "/box/weapons?${RestValues.pageParam}=$page&${RestValues.pageSizeParam}=$pageSize" }
+            get { "/box/weapons?${RestValues.page}=$page&${RestValues.size}=$size" }
         }
         weaponDtoList shouldContain serverDto
     }

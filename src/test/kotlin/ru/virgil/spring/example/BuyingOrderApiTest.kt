@@ -34,7 +34,7 @@ class BuyingOrderApiTest @Autowired constructor(
     @Test
     fun getAll() {
         val buyingOrderDtoList: List<BuyingOrderDto> = fluent.request {
-            get { "/buying_order?${RestValues.pageParam}=$page&${RestValues.pageSizeParam}=$pageSize" }
+            get { "/buying_order?${RestValues.page}=$page&${RestValues.size}=$pageSize" }
         }
         buyingOrderDtoList.shouldNotBeEmpty()
     }
@@ -50,8 +50,8 @@ class BuyingOrderApiTest @Autowired constructor(
     fun getTruckByOrder() {
         val buyingOrder = buyingOrderMocker.random()
         val uri = URIBuilder().setPathSegments("buying_order", buyingOrder.uuid.toString(), "truck")
-            .addParameter(RestValues.pageParam, page.toString())
-            .addParameter(RestValues.pageSizeParam, pageSize.toString())
+            .addParameter(RestValues.page, page.toString())
+            .addParameter(RestValues.size, pageSize.toString())
             .toString()
         val truckDtoList: List<TruckDto> = fluent.request { get { uri } }
         truckDtoList.shouldNotBeEmpty()
