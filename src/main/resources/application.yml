@@ -45,4 +45,4 @@ security:
   use-x-auth-token: false
 
 images:
-  clean-on-destroy: true
+  clean-on-shutdown: true
