@@ -19,13 +19,14 @@ import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.testing.UriHelper
 import ru.virgil.spring.tools.testing.fluent.Fluent
+import ru.virgil.spring.tools.toolsBasePackage
 import java.util.*
 
 private const val imageMimeTypePattern = "image/"
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(basePackage)
+@ComponentScan(toolsBasePackage)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ImageApiTest @Autowired constructor(

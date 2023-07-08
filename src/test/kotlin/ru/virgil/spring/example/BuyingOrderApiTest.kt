@@ -16,10 +16,11 @@ import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.tools.testing.fluent.Fluent
+import ru.virgil.spring.tools.toolsBasePackage
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(basePackage)
+@ComponentScan(toolsBasePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

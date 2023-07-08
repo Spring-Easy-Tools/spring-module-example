@@ -21,10 +21,11 @@ import ru.virgil.spring.tools.asserting.AssertUtils
 import ru.virgil.spring.tools.asserting.PartialMatcher
 import ru.virgil.spring.tools.testing.UriHelper
 import ru.virgil.spring.tools.testing.fluent.Fluent
+import ru.virgil.spring.tools.toolsBasePackage
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(basePackage)
+@ComponentScan(toolsBasePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

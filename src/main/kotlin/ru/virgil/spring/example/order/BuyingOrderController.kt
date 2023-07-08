@@ -17,7 +17,10 @@ class BuyingOrderController(
 ) : BuyingOrderMapper, TruckMapper {
 
     @GetMapping
-    fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int): List<BuyingOrderDto> =
+    fun getAll(
+        @RequestParam(RestValues.page) page: Int,
+        @RequestParam(RestValues.size) size: Int,
+    ): List<BuyingOrderDto> =
         buyingOrderService.getAll(page, size).stream()
             .map { it.toDto() }
             .toList()

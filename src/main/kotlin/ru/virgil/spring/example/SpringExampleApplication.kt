@@ -4,12 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+import ru.virgil.spring.tools.toolsBasePackage
 
-const val basePackage = "ru.virgil.spring"
-
-@SpringBootApplication(scanBasePackages = [basePackage])
+@SpringBootApplication(scanBasePackages = [toolsBasePackage])
 @EnableJpaAuditing
-@ConfigurationPropertiesScan(basePackage)
+@ConfigurationPropertiesScan(toolsBasePackage)
 class SpringExampleApplication
 
 fun main(args: Array<String>) {
