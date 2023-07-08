@@ -36,8 +36,7 @@ spring:
 
 security:
   cors:
-    origins:
-      - http://localhost:4200
+    origins: http://localhost:4200, https://spring-tools.ru
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"

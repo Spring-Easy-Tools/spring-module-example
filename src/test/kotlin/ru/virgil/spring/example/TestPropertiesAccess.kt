@@ -23,8 +23,8 @@ class TestPropertiesAccess @Autowired constructor(
     @Value("\${spring.datasource.url}")
     val default: String,
     val corsProperties: CorsProperties,
-//    @Value("\${security.cors.origins}")
-//    val cors: List<String>,
+    @Value("\${security.cors.origins}")
+    val cors: List<String>,
 ) {
 
     @Test
@@ -35,13 +35,13 @@ class TestPropertiesAccess @Autowired constructor(
 
     @Test
     fun directAccessCustomProperty() {
-        println("Default property: ${corsProperties.origins}")
+        println("Custom property: ${corsProperties.origins}")
         corsProperties.origins shouldContain "http://localhost:4200"
     }
 
-//    @Test
-//    fun accessCustomProperty() {
-//        println("Default property: $cors")
-//        cors shouldContain "http://localhost:4200"
-//    }
+    @Test
+    fun accessCustomProperty() {
+        println("Custom property: $cors")
+        cors shouldContain "http://localhost:4200"
+    }
 }
