@@ -24,6 +24,7 @@ dependencies {
     // Модуль инструментов Spring
     implementation("ru.virgil.spring:spring-module-tools")
 
+    // Зависимости Spring
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -40,6 +41,9 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("stdlib-jdk8"))
+
+    // Third-party зависимости
+    implementation("net.datafaker:datafaker:1.9.0")
 }
 
 @Suppress("SpellCheckingInspection")
