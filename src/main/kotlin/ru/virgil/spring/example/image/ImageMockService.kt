@@ -1,6 +1,5 @@
 package ru.virgil.spring.example.image
 
-import net.datafaker.Faker
 import org.springframework.stereotype.Service
 import ru.virgil.spring.tools.image.ImageMockService
 import ru.virgil.spring.tools.image.ImageProperties
@@ -10,10 +9,8 @@ import ru.virgil.spring.tools.image.ImageService
 @Service
 class ImageMockService(
     imageService: ImageService<PrivateImageFile>,
-    faker: Faker,
     imageProperties: ImageProperties,
 ) : ImageMockService<PrivateImageFile>(
     imageService,
-    faker,
     imageProperties
 )
