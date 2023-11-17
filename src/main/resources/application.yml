@@ -10,7 +10,12 @@ server:
 
 logging:
   level:
+    ru:
+      virgil:
+        spring:
+          tools: DEBUG
     org:
+      # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
       springframework:
         security: DEBUG
       web:
