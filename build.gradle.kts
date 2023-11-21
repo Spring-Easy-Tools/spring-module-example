@@ -3,11 +3,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.2"
-    id("io.spring.dependency-management") version "1.1.2"
-    kotlin("jvm") version "1.9.0"
-    kotlin("plugin.spring") version "1.9.0"
-    kotlin("plugin.jpa") version "1.9.0"
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.4"
+    val kotlinVersion = "1.9.20"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
 }
 
 group = "ru.virgil.spring"
@@ -34,8 +35,6 @@ dependencies {
     implementation("org.springframework.security:spring-security-test")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.session:spring-session-core")
-    implementation("org.springframework.session:spring-session-hazelcast")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
@@ -44,6 +43,7 @@ dependencies {
 
     // Third-party зависимости
     implementation("net.datafaker:datafaker:1.9.0")
+    implementation("org.zalando:logbook-spring-boot-starter:3.6.0")
 }
 
 @Suppress("SpellCheckingInspection")

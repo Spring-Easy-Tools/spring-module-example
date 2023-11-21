@@ -7,9 +7,13 @@ server:
   servlet:
     encoding:
       force: true
+    session:
+      # timeout: 604800 # Week in seconds
+      timeout: 60000 # Testing
 
 logging:
   level:
+    org.zalando.logbook: DEBUG
     org:
       springframework:
         security: DEBUG
@@ -18,6 +22,10 @@ logging:
       session: DEBUG
 
 spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
   security:
     oauth2:
       resourceserver:
@@ -32,16 +40,16 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 security:
   cors:
     origins: http://localhost:4200, https://spring-tools.ru
+    exposed-headers: X-Auth-Token
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
-  use-x-auth-token: false
 
 images:
   clean-on-shutdown: true
