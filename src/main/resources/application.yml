@@ -14,9 +14,9 @@ server:
 logging:
   level:
     ru.virgil:
-      spring.example.chat: TRACE
+      spring.example.chat: DEBUG
     org:
-      springframework.web.socket: TRACE
+      springframework.web.socket: DEBUG
       springframework.security: DEBUG
       zalando.logbook: DEBUG
       web.cors: DEBUG
