@@ -13,17 +13,17 @@ server:
 
 logging:
   level:
-    org.zalando.logbook: DEBUG
+    ru.virgil:
+      spring.example.chat: TRACE
     org:
-      springframework:
-        security: DEBUG
-      web:
-        cors: DEBUG
+      springframework.web.socket: TRACE
+      springframework.security: DEBUG
+      zalando.logbook: DEBUG
+      web.cors: DEBUG
       session: DEBUG
 
 spring:
   session:
-    store-type: jdbc
     jdbc:
       initialize-schema: always
   security:
@@ -53,3 +53,7 @@ security:
 
 images:
   clean-on-shutdown: true
+
+web-socket:
+  allow-auth-uri-query-parameter: true
+  enabled: true

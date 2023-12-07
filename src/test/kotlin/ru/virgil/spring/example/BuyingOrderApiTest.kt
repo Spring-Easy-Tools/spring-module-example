@@ -2,7 +2,7 @@ package ru.virgil.spring.example
 
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldNotBeEmpty
-import org.apache.http.client.utils.URIBuilder
+import io.mikael.urlbuilder.UrlBuilder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,7 +50,7 @@ class BuyingOrderApiTest @Autowired constructor(
     @Test
     fun getTruckByOrder() {
         val buyingOrder = buyingOrderMocker.random()
-        val uri = URIBuilder().setPathSegments("buying_order", buyingOrder.uuid.toString(), "truck")
+        val uri = UrlBuilder.fromString("/buying_order/${buyingOrder.uuid}/truck")
             .addParameter(RestValues.page, page.toString())
             .addParameter(RestValues.size, pageSize.toString())
             .toString()

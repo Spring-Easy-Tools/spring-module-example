@@ -19,7 +19,6 @@ import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.tools.asserting.AssertUtils
 import ru.virgil.spring.tools.asserting.PartialMatcher
-import ru.virgil.spring.tools.testing.UriHelper
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.toolsBasePackage
 
@@ -35,7 +34,7 @@ class BoxApiTest @Autowired constructor(
     val fluent: Fluent,
     val boxMocker: BoxMocker,
     val boxService: BoxService,
-) : UriHelper, PartialMatcher {
+) : PartialMatcher {
 
     private val page = 0
     private val size = 10
