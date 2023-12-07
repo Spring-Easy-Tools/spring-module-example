@@ -17,6 +17,7 @@ logging:
       spring.example.chat: DEBUG
     org:
       springframework.web.socket: DEBUG
+      # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
       springframework.security: DEBUG
       zalando.logbook: DEBUG
       web.cors: DEBUG
