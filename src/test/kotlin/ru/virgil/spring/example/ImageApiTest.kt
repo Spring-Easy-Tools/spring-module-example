@@ -17,7 +17,6 @@ import ru.virgil.spring.example.image.ImageService
 import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.tools.image.FileTypeService
-import ru.virgil.spring.tools.testing.UriHelper
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.toolsBasePackage
 import java.util.*
@@ -34,7 +33,7 @@ class ImageApiTest @Autowired constructor(
     val imageMockService: ImageMockService,
     val imageService: ImageService,
     val fileTypeService: FileTypeService,
-) : UriHelper {
+) {
 
     @WithMockFirebaseUser
     @Test

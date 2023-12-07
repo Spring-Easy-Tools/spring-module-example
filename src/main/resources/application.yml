@@ -7,22 +7,26 @@ server:
   servlet:
     encoding:
       force: true
+    session:
+      # timeout: 604800 # Week in seconds
+      timeout: 60000 # Testing
 
 logging:
   level:
-    ru:
-      virgil:
-        spring:
-          tools: DEBUG
+    ru.virgil:
+      spring.example.chat: DEBUG
     org:
+      springframework.web.socket: DEBUG
       # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
-      springframework:
-        security: DEBUG
-      web:
-        cors: DEBUG
+      springframework.security: DEBUG
+      zalando.logbook: DEBUG
+      web.cors: DEBUG
       session: DEBUG
 
 spring:
+  session:
+    jdbc:
+      initialize-schema: always
   security:
     oauth2:
       resourceserver:
@@ -37,16 +41,20 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 security:
   cors:
     origins: http://localhost:4200, https://spring-tools.ru
+    exposed-headers: X-Auth-Token
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
-  use-x-auth-token: false
 
 images:
   clean-on-shutdown: true
+
+web-socket:
+  allow-auth-uri-query-parameter: true
+  enabled: true
