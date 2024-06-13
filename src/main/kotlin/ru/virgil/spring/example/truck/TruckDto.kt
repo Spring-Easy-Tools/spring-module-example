@@ -9,4 +9,5 @@ data class TruckDto(
     override var updatedAt: LocalDateTime?,
     override var uuid: UUID?,
     var boxesCount: Int?,
+    var bestBoxUUID: UUID,
 ) : IdentifiedDto

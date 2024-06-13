@@ -9,7 +9,7 @@ server:
       force: true
     session:
       # timeout: 604800 # Week in seconds
-      timeout: 60000 # Testing
+      timeout: 7d # Testing
 
 logging:
   level:
