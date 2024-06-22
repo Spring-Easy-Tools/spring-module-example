@@ -1,19 +1,19 @@
 services:
 
   spring-module-app:
-    image: 'spring-module-server:0.0.1-SNAPSHOT'
+    image: 'spring-module-example:0.0.1-SNAPSHOT'
     build:
       context: .
     container_name: spring-module-app
+    user: "${UID}:${GID}"
     depends_on:
       - spring-module-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://spring-module-db:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=af15be37-f9dd-4418-b219-19559fc31bff
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - 8080:8080
+    volumes:
+      - image-data:/workspace/image
 
   spring-module-db:
     image: 'postgres:latest'
@@ -23,3 +23,6 @@ services:
       - POSTGRES_PASSWORD=af15be37-f9dd-4418-b219-19559fc31bff
     ports:
       - 5432:5432
+
+volumes:
+  image-data:
