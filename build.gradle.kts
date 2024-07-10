@@ -42,6 +42,10 @@ dependencies {
     implementation("net.datafaker:datafaker:1.9.0")
     implementation("org.zalando:logbook-spring-boot-starter:3.6.0")
     implementation("io.mikael:urlbuilder:2.0.9")
+
+    // Зависимости для тестирования
+    testImplementation("org.awaitility:awaitility:4.2.1")
+    testImplementation("org.awaitility:awaitility-kotlin:4.2.1")
 }
 
 tasks.withType<KotlinCompile> {
