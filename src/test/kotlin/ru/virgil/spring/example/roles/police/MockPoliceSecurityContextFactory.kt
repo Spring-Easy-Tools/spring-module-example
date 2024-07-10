@@ -1,6 +1,7 @@
 package ru.virgil.spring.example.roles.police
 
 import org.springframework.security.authentication.AuthenticationEventPublisher
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.test.context.support.WithSecurityContextFactory
 import org.springframework.stereotype.Component
@@ -15,5 +16,5 @@ class MockPoliceSecurityContextFactory(
     MockSecurityContextFactory(securityUserService, authenticationEventPublisher) {
 
     override fun createSecurityContext(annotation: WithMockFirebasePoliceman): SecurityContext =
-        createSecurityContext(annotation.firebaseUserId, annotation.authorities.toSet())
+        createSecurityContext(annotation.firebaseUserId, annotation.authorities.map { SimpleGrantedAuthority(it.name) })
 }
