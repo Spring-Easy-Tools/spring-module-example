@@ -21,7 +21,7 @@ import ru.virgil.spring.tools.security.oauth.SecurityUserService
 import ru.virgil.spring.tools.testing.MessagingChannelInterceptor
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingAnnotation
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingTemplate
-import ru.virgil.spring.tools.testing.MessagingTestUtils.waitForResult
+import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
 import ru.virgil.spring.tools.toolsBasePackage
 import ru.virgil.spring.tools.util.logging.Logger
 import java.time.Duration
@@ -100,7 +100,7 @@ class ChatApiTest @Autowired constructor(
         Truth.assertThat(replyDto.text).isEqualTo(testingText)
         Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
 
-        val chatMessage = waitForResult { chatMessageRepository.findAll().find { it.text == testingText } }
+        val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
         Truth.assertThat(chatMessage).isNotNull()
         Truth.assertThat(chatMessage.text).isEqualTo(testingText)
         Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
@@ -154,7 +154,7 @@ class ChatApiTest @Autowired constructor(
         Truth.assertThat(replyDto.text).isEqualTo(testingText)
         Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
 
-        val chatMessage = waitForResult { chatMessageRepository.findAll().find { it.text == testingText } }
+        val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
         Truth.assertThat(chatMessage).isNotNull()
         Truth.assertThat(chatMessage.text).isEqualTo(testingText)
         Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
