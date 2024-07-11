@@ -1,4 +1,4 @@
-package ru.virgil.spring.example
+package ru.virgil.spring.example.test
 
 import io.kotest.matchers.ints.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
 import ru.virgil.spring.example.image.PrivateImageFileDto
@@ -20,8 +20,6 @@ import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.toolsBasePackage
 import java.util.*
-
-private const val imageMimeTypePattern = "image/"
 
 @DirtiesContext
 @SpringBootTest
@@ -34,6 +32,8 @@ class ImageApiTest @Autowired constructor(
     val imageService: ImageService,
     val fileTypeService: FileTypeService,
 ) {
+
+    private val imageMimeTypePattern = "image/"
 
     @WithMockFirebaseUser
     @Test

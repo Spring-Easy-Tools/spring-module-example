@@ -1,4 +1,4 @@
-package ru.virgil.spring.example
+package ru.virgil.spring.example.test
 
 import io.kotest.matchers.nulls.shouldNotBeNull
 import org.junit.jupiter.api.Test

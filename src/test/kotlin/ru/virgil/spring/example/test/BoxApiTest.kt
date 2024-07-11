@@ -1,4 +1,4 @@
-package ru.virgil.spring.example
+package ru.virgil.spring.example.test
 
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
@@ -12,8 +12,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import ru.virgil.spring.example.box.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import ru.virgil.spring.example.box.BoxDto
+import ru.virgil.spring.example.box.BoxMocker
+import ru.virgil.spring.example.box.BoxService
+import ru.virgil.spring.example.box.BoxType
 import ru.virgil.spring.example.roles.police.WithMockFirebasePoliceman
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.rest.RestValues

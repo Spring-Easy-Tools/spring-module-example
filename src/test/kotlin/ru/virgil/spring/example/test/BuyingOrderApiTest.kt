@@ -1,4 +1,4 @@
-package ru.virgil.spring.example
+package ru.virgil.spring.example.test
 
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.string.shouldNotBeEmpty

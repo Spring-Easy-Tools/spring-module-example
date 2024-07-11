@@ -14,7 +14,8 @@ server:
 logging:
   level:
     ru.virgil:
-      spring.example.chat: DEBUG
+      # Так удобнее регулировать логгирование тестов?
+      spring.example.test: DEBUG
     org:
       springframework.web.socket: DEBUG
       # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
@@ -24,6 +25,9 @@ logging:
       session: DEBUG
 
 spring:
+  output:
+    ansi:
+      enabled: always
   session:
     jdbc:
       initialize-schema: always

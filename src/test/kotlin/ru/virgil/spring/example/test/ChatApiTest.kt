@@ -1,8 +1,7 @@
-package ru.virgil.spring.example
+package ru.virgil.spring.example.test
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.truth.Truth
-import org.awaitility.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
