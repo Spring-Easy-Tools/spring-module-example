@@ -1,6 +1,7 @@
 package ru.virgil.spring.example.order
 
 import org.springframework.web.bind.annotation.*
+import ru.virgil.spring.example.box.BoxService
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.example.truck.TruckMapper
@@ -14,6 +15,7 @@ import java.util.*
 class BuyingOrderController(
     private val buyingOrderService: BuyingOrderService,
     private val truckService: TruckService,
+    override val boxService: BoxService,
 ) : BuyingOrderMapper, TruckMapper {
 
     @GetMapping

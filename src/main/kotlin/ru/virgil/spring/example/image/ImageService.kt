@@ -4,6 +4,7 @@ import org.springframework.core.io.ResourceLoader
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import ru.virgil.spring.tools.image.FileTypeService
+import ru.virgil.spring.tools.image.ImageProperties
 import ru.virgil.spring.tools.image.ImageService
 import java.nio.file.Path
 import java.util.*
@@ -13,10 +14,12 @@ class ImageService(
     resourceLoader: ResourceLoader,
     privateImageRepository: PrivateImageRepository,
     fileTypeService: FileTypeService,
+    imageProperties: ImageProperties,
 ) : ImageService<PrivateImageFile>(
     resourceLoader,
     privateImageRepository,
-    fileTypeService
+    fileTypeService,
+    imageProperties,
 ) {
 
     override fun createPrivateImageFile(uuid: UUID, owner: UserDetails, imageFilePath: Path): PrivateImageFile {

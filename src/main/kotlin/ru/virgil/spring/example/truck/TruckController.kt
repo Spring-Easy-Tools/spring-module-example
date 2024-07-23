@@ -13,8 +13,14 @@ import java.util.*
 @RequestMapping("/truck")
 class TruckController(
     private val truckService: TruckService,
-    private val boxService: BoxService,
-) : BoxMapper {
+    override val boxService: BoxService,
+) : BoxMapper, TruckMapper {
+
+    @GetMapping("/uuid")
+    fun getTruck(uuid: UUID): TruckDto {
+        val truck = truckService.get(uuid)
+        return truck.toDto()
+    }
 
     @GetMapping("/{truckUuid}/box")
     fun getBoxesByTruck(

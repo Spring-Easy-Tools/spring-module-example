@@ -7,22 +7,30 @@ server:
   servlet:
     encoding:
       force: true
+    session:
+      # timeout: 604800 # Week in seconds
+      timeout: 7d # Testing
 
 logging:
   level:
-    ru:
-      virgil:
-        spring:
-          tools: DEBUG
+    ru.virgil:
+      # Так удобнее регулировать логгирование тестов?
+      spring.example.test: DEBUG
     org:
+      springframework.web.socket: DEBUG
       # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
-      springframework:
-        security: DEBUG
-      web:
-        cors: DEBUG
+      springframework.security: DEBUG
+      zalando.logbook: DEBUG
+      web.cors: DEBUG
       session: DEBUG
 
 spring:
+  output:
+    ansi:
+      enabled: always
+  session:
+    jdbc:
+      initialize-schema: always
   security:
     oauth2:
       resourceserver:
@@ -30,23 +38,27 @@ spring:
           jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
           issuer-uri: https://securetoken.google.com/spring-tools-234ee
   datasource:
-    # url: jdbc:postgresql://localhost:5432/postgres
+#    url: jdbc:postgresql://localhost:5432/postgres
     url: jdbc:h2:mem:default
     username: postgres
     password: af15be37-f9dd-4418-b219-19559fc31bff
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 security:
   cors:
     origins: http://localhost:4200, https://spring-tools.ru
+    exposed-headers: X-Auth-Token
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
-  use-x-auth-token: false
 
 images:
   clean-on-shutdown: true
+
+web-socket:
+  allow-auth-uri-query-parameter: true
+  enabled: true
