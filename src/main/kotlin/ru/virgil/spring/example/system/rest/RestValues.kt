@@ -9,5 +9,4 @@ object RestValues {
 
     const val page = "page"
     const val size = "size"
-
 }

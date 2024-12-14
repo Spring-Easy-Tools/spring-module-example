@@ -9,7 +9,7 @@ import ru.virgil.spring.example.security.SecurityUser
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned
 import ru.virgil.spring.tools.util.data.Timed
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
@@ -25,10 +25,10 @@ class ChatMessage(
     override lateinit var uuid: UUID
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @CreatedBy
     @ManyToOne

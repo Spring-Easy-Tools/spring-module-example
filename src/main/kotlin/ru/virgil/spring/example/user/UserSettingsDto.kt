@@ -1,13 +1,13 @@
 package ru.virgil.spring.example.user
 
 import ru.virgil.spring.example.system.dto.IdentifiedDto
-import java.time.LocalDateTime
+import ru.virgil.spring.example.system.dto.TimedDto
+import java.time.ZonedDateTime
 import java.util.*
 
-// TODO: data class
-class UserSettingsDto(
-    override var createdAt: LocalDateTime?,
-    override var updatedAt: LocalDateTime?,
+data class UserSettingsDto(
+    override var createdAt: ZonedDateTime?,
+    override var updatedAt: ZonedDateTime?,
     override var uuid: UUID?,
     var name: String? = null,
-) : IdentifiedDto
+) : IdentifiedDto, TimedDto

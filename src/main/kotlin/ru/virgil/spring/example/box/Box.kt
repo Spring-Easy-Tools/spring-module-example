@@ -11,7 +11,7 @@ import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned
 import ru.virgil.spring.tools.util.data.Soft
 import ru.virgil.spring.tools.util.data.Timed
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
@@ -32,10 +32,10 @@ class Box(
     override lateinit var uuid: UUID
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
     @CreatedBy
     @ManyToOne

@@ -2,7 +2,7 @@ package ru.virgil.spring.example.system.dto
 
 import java.util.*
 
-interface IdentifiedDto : TimedDto {
+interface IdentifiedDto {
 
     var uuid: UUID?
 }

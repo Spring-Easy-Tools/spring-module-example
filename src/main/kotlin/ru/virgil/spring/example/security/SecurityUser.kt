@@ -6,7 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp
 import ru.virgil.spring.tools.security.oauth.SecurityUser
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Timed
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
@@ -23,10 +23,10 @@ class SecurityUser(
     override lateinit var uuid: UUID
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
     @ElementCollection(fetch = FetchType.EAGER)
     override val springAuthorities: MutableCollection<String> = userAuthorities.map { it.toString() }.toMutableSet()

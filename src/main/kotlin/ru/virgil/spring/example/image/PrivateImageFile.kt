@@ -10,7 +10,7 @@ import ru.virgil.spring.tools.image.PrivateImageInterface
 import ru.virgil.spring.tools.util.data.Soft
 import ru.virgil.spring.tools.util.data.Timed
 import java.nio.file.Path
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 
 @EntityListeners(AuditingEntityListener::class)
@@ -31,10 +31,10 @@ class PrivateImageFile(fileLocation: Path) : Timed, PrivateImageInterface, Soft 
     override lateinit var uuid: UUID
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
     @CreatedBy
     @ManyToOne
