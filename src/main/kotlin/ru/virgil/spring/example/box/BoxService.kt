@@ -3,7 +3,7 @@ package ru.virgil.spring.example.box
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.security.oauth.SecurityUserFunctions.getPrincipal
+import ru.virgil.spring.tools.security.oauth.Security.getPrincipal
 import java.util.*
 
 

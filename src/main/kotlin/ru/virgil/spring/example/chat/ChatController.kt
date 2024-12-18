@@ -12,12 +12,14 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
 import ru.virgil.spring.example.security.SecurityUserRepository
 import ru.virgil.spring.example.security.SecurityUserService
-import ru.virgil.spring.tools.security.oauth.getPrincipal
+import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.security.oauth.Security.getPrincipal
 import ru.virgil.spring.tools.util.logging.Logger
 import java.util.*
 
 // todo: Можно как-то так. А зачем?
 // @MessagingGateway
+@GlobalCors
 @Controller
 class ChatController(
     private val faker: Faker,
