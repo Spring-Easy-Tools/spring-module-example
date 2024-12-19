@@ -1,7 +1,6 @@
 package ru.virgil.spring.example.box
 
 import jakarta.annotation.security.RolesAllowed
-import jakarta.persistence.*
 import org.springframework.security.access.prepost.PostAuthorize
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -21,13 +20,13 @@ class BoxController(
 
     @GetMapping
     fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int): List<BoxDto> =
-        boxService.getAll(page, size).stream()
+        boxService.getAll(page, size)
             .map { it.toDto() }
             .toList()
 
     @RolesAllowed("ROLE_POLICE")
     @GetMapping("/weapons")
-    fun getAllWeapons(): List<BoxDto> = boxService.getAllMyWeapons().stream()
+    fun getAllWeapons(): List<BoxDto> = boxService.getAllMyWeapons()
         .map { it.toDto() }
         .toList()
 

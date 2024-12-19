@@ -29,9 +29,8 @@ class TruckController(
     ): List<BoxDto> {
         val truck = truckService.get(truckUuid)
         val boxes = boxService.getAll(truck, page, size)
-        return boxes.stream()
+        return boxes
             .map { it.toDto() }
             .toList()
     }
-
 }

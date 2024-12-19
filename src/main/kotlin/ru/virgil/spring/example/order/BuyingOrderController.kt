@@ -23,7 +23,7 @@ class BuyingOrderController(
         @RequestParam(RestValues.page) page: Int,
         @RequestParam(RestValues.size) size: Int,
     ): List<BuyingOrderDto> =
-        buyingOrderService.getAll(page, size).stream()
+        buyingOrderService.getAll(page, size)
             .map { it.toDto() }
             .toList()
 
@@ -41,7 +41,7 @@ class BuyingOrderController(
     ): List<TruckDto> {
         val buyingOrder = buyingOrderService.get(buyingOrderUuid)
         val trucks = truckService.getAll(buyingOrder, page, size)
-        return trucks.stream()
+        return trucks
             .map { it.toDto() }
             .toList()
     }
