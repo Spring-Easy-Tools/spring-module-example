@@ -34,10 +34,10 @@ class ChatController(
     @MessageMapping("/chat/send/{username}")
     fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: UUID) {
         val userDetails = securityUserService.loadUserByUsername(username.toString())
-        logger.trace("New user message! {}", pprint(chatMessageDto))
+        logger.trace { "New user message! ${pprint(chatMessageDto)}" }
         var chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
         chatMessage = chatMessageRepository.save(chatMessage)
-        logger.trace("Message saved to repository! {}", pprint(chatMessage))
+        logger.trace { "Message saved to repository! ${pprint(chatMessage)}" }
         // Аннотации и методы по разному заворачивают пейлоад в сообщение
         webSocketMessaging.convertAndSendToUser(userDetails!!.username, "/chat/my", chatMessageDto)
     }
@@ -48,7 +48,7 @@ class ChatController(
     @MessageMapping("/chat/send")
     @SendTo("/chat")
     fun send(@Payload chatMessageDto: ChatMessageDto): GenericMessage<ChatMessageDto> {
-        logger.trace("New message! {}", chatMessageDto)
+        logger.trace { "New message! ${pprint(chatMessageDto)}" }
         val chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
         chatMessageRepository.save(chatMessage)
         return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getPrincipal().username))
@@ -57,7 +57,7 @@ class ChatController(
     @Scheduled(cron = "*/30 * * * * *")
     private fun simulateChatMessage() {
         val simMessage = ChatMessageDto(faker.backToTheFuture().quote(), faker.backToTheFuture().character())
-        logger.trace("Simulate message! {}", simMessage)
+        logger.trace { "Simulate message! ${pprint(simMessage)}" }
         val genericMessage = GenericMessage<ChatMessageDto>(simMessage)
         webSocketMessaging.convertAndSend("/chat", genericMessage)
     }
