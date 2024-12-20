@@ -20,8 +20,9 @@ class Box(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var type: BoxType = BoxType.USUAL,
-    @ManyToOne(cascade = [CascadeType.REMOVE])
+    @ManyToOne(cascade = [CascadeType.ALL])
     var truck: Truck,
+    @Lob
     var description: String,
     var price: Int = 0,
     var weight: Float = 0f,

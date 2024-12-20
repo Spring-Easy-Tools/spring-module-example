@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface ChatMessageRepository: CrudRepository<ChatMessage, UUID> {
-
-}
+interface ChatMessageRepository : CrudRepository<ChatMessage, UUID>

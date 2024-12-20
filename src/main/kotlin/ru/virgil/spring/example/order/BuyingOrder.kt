@@ -17,8 +17,9 @@ import java.util.*
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class BuyingOrder(
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.ALL])
     var truck: Truck,
+    @Lob
     var description: String?,
 ) : Owned, Identified, Timed, Soft {
 

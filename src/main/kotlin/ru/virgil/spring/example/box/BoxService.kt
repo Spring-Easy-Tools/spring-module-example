@@ -43,10 +43,10 @@ class BoxService(
 
     fun countMy(): Long = boxRepository.countAllByCreatedByAndDeletedIsFalse(getPrincipal())
 
-    fun findBestBoxByTruck(truck: Truck): UUID {
+    fun findBestBoxByTruck(truck: Truck): UUID? {
         val boxes = boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
             getPrincipal(), truck, PageRequest.of(0, 1)
         )
-        return boxes.random().uuid
+        return boxes.randomOrNull()?.uuid
     }
 }

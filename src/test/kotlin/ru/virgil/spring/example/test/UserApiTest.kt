@@ -1,8 +1,7 @@
 package ru.virgil.spring.example.test
 
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,12 +17,14 @@ import ru.virgil.spring.tools.toolsBasePackage
 @ComponentScan(toolsBasePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserApiTest @Autowired constructor(val fluent: Fluent) {
+class UserApiTest @Autowired constructor(
+    val fluent: Fluent,
+) {
 
     @Test
     fun get() {
-        val userSettingsDto: UserSettingsDto = fluent.request { get { "/user_settings" } }
-        userSettingsDto.shouldNotBeNull()
+        val createdUserSettingsDto: UserSettingsDto = fluent.request { post { "/user_settings" } }
+        val currentUserSettingsDto: UserSettingsDto = fluent.request { get { "/user_settings" } }
+        createdUserSettingsDto shouldBeEqual currentUserSettingsDto
     }
 }

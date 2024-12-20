@@ -16,6 +16,12 @@ class UserSettingsController(
         return currentUser.toDto()
     }
 
+    @PostMapping
+    fun post(): UserSettingsDto {
+        val createdUser = userSettingsService.create()
+        return createdUser.toDto()
+    }
+
     // TODO: Покрыть тестом
     @PutMapping
     fun put(@RequestBody userSettingsDto: UserSettingsDto): UserSettingsDto {

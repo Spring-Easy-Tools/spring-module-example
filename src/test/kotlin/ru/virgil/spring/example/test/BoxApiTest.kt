@@ -6,7 +6,6 @@ import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.floats.shouldBeGreaterThanOrEqual
 import net.datafaker.Faker
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,12 +13,12 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.virgil.spring.example.box.BoxDto
-import ru.virgil.spring.example.box.BoxMocker
-import ru.virgil.spring.example.box.BoxService
+import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.box.BoxType
 import ru.virgil.spring.example.roles.police.WithMockFirebasePoliceman
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.rest.RestValues
+import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.asserting.AssertUtils
 import ru.virgil.spring.tools.asserting.PartialMatcher
 import ru.virgil.spring.tools.testing.fluent.Fluent
@@ -30,13 +29,12 @@ import ru.virgil.spring.tools.toolsBasePackage
 @ComponentScan(toolsBasePackage)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BoxApiTest @Autowired constructor(
     override val assertUtils: AssertUtils,
     val faker: Faker,
     val fluent: Fluent,
-    val boxMocker: BoxMocker,
-    val boxService: BoxService,
+    private val boxGenerator: BoxGenerator,
+    private val truckGenerator: TruckGenerator,
 ) : PartialMatcher {
 
     private val page = 0
@@ -44,6 +42,7 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun getAll() {
+        boxGenerator.generate(100).also { boxGenerator.repository.saveAll(it) }
         val boxDtoList: MutableList<BoxDto> = fluent.request {
             get { "/box?${RestValues.page}=$page&${RestValues.size}=$size" }
         }
@@ -52,7 +51,9 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun get() {
-        val randomBox = boxService.getAll(0, 10).last { it.type == BoxType.USUAL }
+        val randomBox = boxGenerator.generate()
+            .also { it.type = BoxType.USUAL }
+            .also { boxGenerator.repository.save(it) }
         val boxDto: BoxDto = fluent.request { get { "/box/${randomBox.uuid}" } }
         boxDto.weight!! shouldBeGreaterThanOrEqual 10f
     }
@@ -69,6 +70,7 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun create() {
+        truckGenerator.generate().also { truckGenerator.repository.save(it) }
         val testDto = BoxDto(type = BoxType.USUAL, description = "CREATED", price = 50000, weight = 658f)
         val createdDto: BoxDto = fluent.request {
             post { "/box" }
@@ -82,7 +84,7 @@ class BoxApiTest @Autowired constructor(
     @Test
     fun edit() {
         val testDto = BoxDto(type = BoxType.USUAL, description = "EDITED", price = 78434, weight = 456f)
-        val randomBox = boxMocker.random()
+        val randomBox = boxGenerator.generate().also { boxGenerator.repository.save(it) }
         val changedDto: BoxDto = fluent.request {
             put { "/box/${randomBox.uuid}" }
             send { testDto }
@@ -94,7 +96,7 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun delete() {
-        val box = boxMocker.random()
+        val box = boxGenerator.generate().also { boxGenerator.repository.save(it) }
         fluent.request<Any> { delete { "/box/${box.uuid}" } }
         fluent.request<Any> {
             get { "/box/${box.uuid}" }
@@ -115,6 +117,7 @@ class BoxApiTest @Autowired constructor(
     @Test
     @WithMockFirebasePoliceman
     fun createWeaponByPoliceman() {
+        truckGenerator.generate().also { truckGenerator.repository.save(it) }
         val testDto = BoxDto(type = BoxType.WEAPON, description = "CREATED-BY-POLICEMAN", price = 50000, weight = 658f)
         val createdDto: BoxDto = fluent.request {
             post { "/box" }
@@ -137,6 +140,7 @@ class BoxApiTest @Autowired constructor(
     @WithMockFirebasePoliceman
     @Test
     fun getAllWeaponsByPoliceman() {
+        truckGenerator.generate().also { truckGenerator.repository.save(it) }
         val testDto = BoxDto(type = BoxType.WEAPON, description = "CREATED-BY-POLICEMAN", price = 50000, weight = 658f)
         val serverDto: BoxDto = fluent.request {
             post { "/box" }

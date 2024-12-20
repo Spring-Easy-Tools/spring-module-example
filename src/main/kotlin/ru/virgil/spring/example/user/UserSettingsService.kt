@@ -1,5 +1,6 @@
 package ru.virgil.spring.example.user
 
+import org.jeasy.random.EasyRandom
 import org.springframework.stereotype.Service
 import ru.virgil.spring.example.security.SecurityUserService
 
@@ -7,6 +8,7 @@ import ru.virgil.spring.example.security.SecurityUserService
 class UserSettingsService(
     private val repository: UserSettingsRepository,
     private val securityUserService: SecurityUserService,
+    private val easyRandom: EasyRandom,
 ) : UserSettingsMapper {
 
     fun get(): UserSettings {
@@ -18,6 +20,11 @@ class UserSettingsService(
         val currentUserSettings = get()
         val editedUserSettings = currentUserSettings merge userSettings
         return repository.save(editedUserSettings)
+    }
+
+    fun create(): UserSettings {
+        val userSettings = easyRandom.nextObject(UserSettings::class.java).also { repository.save(it) }
+        return repository.save(userSettings)
     }
 
     // @EventListener

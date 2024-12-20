@@ -1,4 +1,4 @@
-package ru.virgil.spring.example.mock
+package ru.virgil.spring.example.system
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.event.EventListener
@@ -7,10 +7,12 @@ import org.springframework.stereotype.Component
 import ru.virgil.spring.example.security.SecurityUser
 
 /**
- * Этот хендлер отвечает за запуск генератора моков после прохождения авторизации
+ * Тут можно делать вещи сразу после авторизации
  * */
 @Component
-class MockAuthSuccessHandler(val mockGenerator: MockGenerator, val context: ApplicationContext) {
+class AuthSuccessHandler(
+    val context: ApplicationContext,
+) {
 
     lateinit var principal: SecurityUser
 
@@ -20,7 +22,5 @@ class MockAuthSuccessHandler(val mockGenerator: MockGenerator, val context: Appl
         //    поэтому дополнительно отслеживаем
         if (!success!!.authentication.isAuthenticated) return
         principal = success.authentication.principal as SecurityUser
-        // TODO: Вынести логику управления запуском мокера сюда
-        mockGenerator.start(principal)
     }
 }

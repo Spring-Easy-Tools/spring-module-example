@@ -21,9 +21,9 @@ private const val CONNECTION = "truck"
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class Truck(
-    @OneToMany(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER, mappedBy = CONNECTION)
+    @OneToMany(mappedBy = CONNECTION, fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     var boxes: Set<Box> = HashSet(),
-    @OneToMany(mappedBy = CONNECTION, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = CONNECTION, fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     val buyingOrder: Set<BuyingOrder> = HashSet(),
 ) : Identified, Timed, Soft {
 

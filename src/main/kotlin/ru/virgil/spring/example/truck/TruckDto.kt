@@ -11,5 +11,5 @@ data class TruckDto(
     override var updatedAt: ZonedDateTime?,
     override var uuid: UUID?,
     var boxesCount: Int?,
-    var bestBoxUUID: UUID,
+    var bestBoxUUID: UUID?,
 ) : IdentifiedDto, TimedDto

@@ -19,9 +19,9 @@ import ru.virgil.spring.example.chat.ChatMessageRepository
 import ru.virgil.spring.tools.security.mock.MockSecurityContextFactory.Companion.mockSecurityContext
 import ru.virgil.spring.tools.security.oauth.SecurityUserService
 import ru.virgil.spring.tools.testing.MessagingChannelInterceptor
+import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingAnnotation
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingTemplate
-import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
 import ru.virgil.spring.tools.toolsBasePackage
 import ru.virgil.spring.tools.util.logging.Logger
 import java.time.Duration

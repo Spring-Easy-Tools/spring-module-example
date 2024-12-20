@@ -1,4 +1,4 @@
-package ru.virgil.spring.example.user
+package ru.virgil.spring.example.box
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
@@ -6,4 +6,4 @@ import ru.virgil.spring.example.system.entity.OwnedRepository
 import java.util.*
 
 @Repository
-interface UserSettingsMockerRepository : CrudRepository<UserSettings, UUID>, OwnedRepository<UserSettings>
+interface BoxGeneratorRepository : CrudRepository<Box, UUID>, OwnedRepository<Box>
