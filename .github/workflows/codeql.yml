@@ -13,10 +13,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: ["master"]
+    branches: [master]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: ["master"]
+    branches: [master]
   schedule:
     - cron: "40 22 * * 4"
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["java"]
+        language: [java]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'swift' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
@@ -72,13 +72,13 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: "21"
-          distribution: "oracle"
-          cache: "gradle"
+          java-version: 21
+          distribution: oracle
+          cache: gradle
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: current
-      - run: ./gradlew build
+      - run: ./gradlew classes
 
       # ℹ️ Command-line programs to run using the OS shell.
       # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun

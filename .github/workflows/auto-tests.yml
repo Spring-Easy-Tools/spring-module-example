@@ -9,17 +9,17 @@
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
 #
-name: "Spring Tests"
+name: Spring Tests
 
 on:
   push:
-    branches: ["master"]
+    branches: [master]
   pull_request:
   workflow_dispatch:
 
 jobs:
   testing:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     timeout-minutes: 360
     permissions:
       actions: read
@@ -33,9 +33,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: "21"
-          distribution: "oracle"
-          cache: "gradle"
+          java-version: 21
+          distribution: oracle
+          cache: gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
