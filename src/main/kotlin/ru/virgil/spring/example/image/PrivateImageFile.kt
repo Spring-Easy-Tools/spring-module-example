@@ -26,8 +26,8 @@ class PrivateImageFile(fileLocation: Path) : Timed, PrivateImageInterface, Soft 
 
     private var location: String = fileLocation.toString()
 
+    /** Нельзя ставить аннотацию @GeneratedValue, из-за неё начинается конфликт строк в БД */
     @Id
-    @GeneratedValue
     override lateinit var uuid: UUID
 
     @CreationTimestamp

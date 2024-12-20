@@ -27,6 +27,8 @@ class CorsTest @Autowired constructor(
     private val faker: Faker,
 ) {
 
+    // todo: добавить тест на фильтрацию заголовков?
+
     @Test
     fun testAllowedOrigin() {
         val randomOrigin = corsProperties.origins.random()

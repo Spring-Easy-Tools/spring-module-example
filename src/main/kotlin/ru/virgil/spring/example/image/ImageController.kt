@@ -56,7 +56,7 @@ class ImageController(
         @RequestParam image: MultipartFile,
         @RequestParam(required = false) imageName: String?,
     ): PrivateImageFileDto {
-        val privateFileImage = imageService.savePrivate(image.bytes, imageName ?: "static/image", securityUser)
+        val privateFileImage = imageService.savePrivate(image.bytes, imageName ?: "image-name", securityUser)
         return privateFileImage.toDto()
     }
 }
