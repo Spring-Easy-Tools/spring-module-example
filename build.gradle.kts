@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.security:spring-security-messaging")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -45,6 +46,9 @@ dependencies {
     // Зависимости для тестирования
     testImplementation("org.awaitility:awaitility:4.2.1")
     testImplementation("org.awaitility:awaitility-kotlin:4.2.1")
+
+    // Зависимости для разработки
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 kotlin {

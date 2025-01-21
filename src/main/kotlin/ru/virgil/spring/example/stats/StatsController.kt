@@ -1,40 +1,45 @@
 package ru.virgil.spring.example.stats
 
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ru.virgil.spring.example.box.BoxRepository
-import ru.virgil.spring.example.box.BoxService
-import ru.virgil.spring.example.order.BuyingOrderRepository
-import ru.virgil.spring.example.order.BuyingOrderService
-import ru.virgil.spring.example.truck.TruckRepository
 import ru.virgil.spring.tools.security.cors.GlobalCors
+
+@Controller
+@RequestMapping("/")
+class StatsHtmlController(
+    private val statsService: StatsService,
+) {
+
+    @ModelAttribute("all_stats")
+    fun getAllStats() = statsService.getAllStats().toString()
+
+    @ModelAttribute("my_stats")
+    fun getMyStats() = try {
+        statsService.getMyStats().toString()
+    } catch (e: SecurityException) {
+        "Not authorized"
+    }
+
+    @GetMapping
+    fun showStats(): String = "index.html"
+
+    @GetMapping("/login")
+    fun loginPage() = "login.html"
+}
 
 @GlobalCors
 @RestController
 @RequestMapping("/stats")
 class StatsController(
-    private val boxService: BoxService,
-    private val boxRepository: BoxRepository,
-    private val truckRepository: TruckRepository,
-    private val buyingOrderRepository: BuyingOrderRepository,
-    private val buyingOrderService: BuyingOrderService,
+    private val statsService: StatsService,
 ) {
 
     @GetMapping("/all")
-    fun getAllStats(): StatsDto {
-        val boxesCount = boxRepository.count()
-        val trucksCount = truckRepository.count()
-        val ordersCount = buyingOrderRepository.count()
-        return StatsDto(boxesCount, trucksCount, ordersCount)
-    }
+    fun getAllStats() = statsService.getAllStats()
 
     @GetMapping("/my")
-    fun getMyStats(): StatsDto {
-        val boxesCount = boxService.countMy()
-        val trucksCount = truckRepository.count()
-        val ordersCount = buyingOrderService.countMy()
-        return StatsDto(boxesCount, trucksCount, ordersCount)
-    }
-
+    fun getMyStats() = statsService.getMyStats()
 }

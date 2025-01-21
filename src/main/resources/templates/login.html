@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<p>Login works! Live Reloaded!</p>
+<button>Login via Google</button>
+
+<div id="g_id_onload"
+     data-client_id="992246924021-c3fptbklbn386pclhcjm32fm5skfvhmj.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-login_uri="/login_success"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+
+<!--<script>-->
+<!--    function onSuccess(googleUser) {-->
+<!--      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());-->
+<!--    }-->
+<!--    function onFailure(error) {-->
+<!--      console.log(error);-->
+<!--    }-->
+<!--    function renderButton() {-->
+<!--      gapi.signin2.render('my-signin2', {-->
+<!--        'scope': 'profile email',-->
+<!--        'width': 240,-->
+<!--        'height': 50,-->
+<!--        'longtitle': true,-->
+<!--        'theme': 'dark',-->
+<!--        'onsuccess': onSuccess,-->
+<!--        'onfailure': onFailure-->
+<!--      });-->
+<!--    }-->
+<!--</script>-->
+
+<!--<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>-->
+
+</body>
+</html>

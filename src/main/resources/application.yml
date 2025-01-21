@@ -55,6 +55,8 @@ security:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
+    - "/"
+    - "/login"
 
 images:
   clean-on-shutdown: true
