@@ -35,12 +35,12 @@ class TestPropertiesAccess @Autowired constructor(
     @Test
     fun directAccessCustomProperty() {
         println("Custom property: ${corsProperties.origins}")
-        corsProperties.origins shouldContain "http://localhost:4200"
+        corsProperties.origins shouldContain "http://localhost:8080"
     }
 
     @Test
     fun accessCustomProperty() {
         println("Custom property: $cors")
-        cors shouldContain "http://localhost:4200"
+        cors shouldContain "http://localhost:8080"
     }
 }

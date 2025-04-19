@@ -10,6 +10,7 @@ import java.io.FileNotFoundException
 @ControllerAdvice
 class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
+    // todo: заменить на расширения для nullable
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = [NoSuchElementException::class])
     fun handleNotFound() {

@@ -16,7 +16,7 @@ import ru.virgil.spring.tools.security.cors.CorsProperties
 import ru.virgil.spring.tools.toolsBasePackage
 
 // todo: перенести в Spring-модуль
-@DirtiesContext
+// @DirtiesContext
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockFirebaseUser

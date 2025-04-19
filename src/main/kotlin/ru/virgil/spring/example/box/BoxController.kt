@@ -16,10 +16,16 @@ class BoxController(
     private val truckService: TruckService,
     private val boxService: BoxService,
     private val boxSecurity: BoxSecurity,
+    private val boxGenerator: BoxGenerator,
 ) : BoxMapper {
 
+    @GetMapping("/generate")
+    fun generate(@RequestParam portions: Int = 10) =
+        boxGenerator.generate(portions).let { boxGenerator.repository.saveAll(it) }
+            .map { it.toDto() }
+
     @GetMapping
-    fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int): List<BoxDto> =
+    fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int) =
         boxService.getAll(page, size)
             .map { it.toDto() }
             .toList()

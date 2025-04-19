@@ -8,8 +8,7 @@ server:
     encoding:
       force: true
     session:
-      # timeout: 604800 # Week in seconds
-      timeout: 7d # Testing
+      timeout: 7d
 
 logging:
   level:
@@ -32,6 +31,10 @@ spring:
     jdbc:
       initialize-schema: always
   security:
+    user:
+      name: admin
+      password: f750cef3-fed1-4b52-ace3-8aac3ff1fa2f
+      roles: ADMIN
     oauth2:
       resourceserver:
         jwt:
@@ -49,14 +52,14 @@ spring:
 
 security:
   cors:
-    origins: http://localhost:4200, https://spring-tools.ru
+    origins: http://localhost:8080
     exposed-headers: X-Auth-Token
+    allow-credentials: true
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
     - "/"
-    - "/login"
 
 images:
   clean-on-shutdown: true

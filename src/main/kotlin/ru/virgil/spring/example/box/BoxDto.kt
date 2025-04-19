@@ -10,7 +10,7 @@ data class BoxDto(
     override var createdAt: ZonedDateTime? = null,
     override var updatedAt: ZonedDateTime? = null,
     var type: BoxType? = BoxType.USUAL,
-    var description: String?,
+    var description: String? = null,
     var price: Int? = 0,
     var weight: Float? = 0f,
 ) : IdentifiedDto, TimedDto

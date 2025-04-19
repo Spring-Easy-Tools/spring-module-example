@@ -5,8 +5,8 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.virgil.spring.example.security.SecurityUser
 import ru.virgil.spring.example.truck.Truck
+import ru.virgil.spring.tools.entity.Columns
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned
 import ru.virgil.spring.tools.util.data.Soft
@@ -22,7 +22,7 @@ class Box(
     var type: BoxType = BoxType.USUAL,
     @ManyToOne(cascade = [CascadeType.ALL])
     var truck: Truck,
-    @Lob
+    @Column(columnDefinition = Columns.text)
     var description: String,
     var price: Int = 0,
     var weight: Float = 0f,
@@ -39,8 +39,7 @@ class Box(
     override lateinit var updatedAt: ZonedDateTime
 
     @CreatedBy
-    @ManyToOne
-    override lateinit var createdBy: SecurityUser
+    override lateinit var createdBy: String
 
     override var deleted: Boolean = false
 }

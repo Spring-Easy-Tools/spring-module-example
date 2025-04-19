@@ -1,38 +1,60 @@
 package ru.virgil.spring.example.user
 
-import org.jeasy.random.EasyRandom
+import org.springframework.security.core.Authentication
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
-import ru.virgil.spring.example.security.SecurityUserService
+import ru.virgil.spring.tools.security.Security
+import ru.virgil.spring.tools.security.Security.getSimpleCreator
+import ru.virgil.spring.tools.util.Http.orNotFound
+import ru.virgil.spring.tools.util.Http.thenConflict
+import java.net.URI
 
 @Service
 class UserSettingsService(
     private val repository: UserSettingsRepository,
-    private val securityUserService: SecurityUserService,
-    private val easyRandom: EasyRandom,
+    private val userDetailsManager: UserDetailsManager,
 ) : UserSettingsMapper {
 
-    fun get(): UserSettings {
-        val securityUser = securityUserService.principal
-        return repository.findByCreatedBy(securityUser).orElseThrow()!!
+
+    fun get(): UserSettings? {
+        return repository.findByCreatedBy(getSimpleCreator())
     }
 
     fun edit(userSettings: UserSettings): UserSettings {
-        val currentUserSettings = get()
+        val currentUserSettings = get().orNotFound()
         val editedUserSettings = currentUserSettings merge userSettings
         return repository.save(editedUserSettings)
     }
 
     fun create(): UserSettings {
-        val userSettings = easyRandom.nextObject(UserSettings::class.java).also { repository.save(it) }
+        get().thenConflict()
+        val authentication = Security.getAuthentication()
+        val userSettings = when (authentication) {
+            is OAuth2AuthenticationToken -> formOauthUserSettings(authentication)
+            else -> formFallbackUserSettings(authentication)
+        }
         return repository.save(userSettings)
     }
 
-    // @EventListener
-    // fun onSuccess(success: AuthenticationSuccessEvent?) {
-    //
-    //     principal = success!!.authentication.principal as SecurityUser
-    //     mocker.start()
-    // }
+    private fun formFallbackUserSettings(authentication: Authentication): UserSettings {
+        return UserSettings(authentication.name)
+    }
+
+    private fun formOauthUserSettings(authentication: OAuth2AuthenticationToken): UserSettings {
+        val principal = authentication.principal as OidcUser
+        val userSettings = UserSettings(
+            principal.fullName,
+            principal.email,
+            URI.create(principal.picture)
+        )
+        return userSettings
+    }
+
+    fun delete() {
+        repository.delete(get().orNotFound())
+    }
 
     companion object {
 

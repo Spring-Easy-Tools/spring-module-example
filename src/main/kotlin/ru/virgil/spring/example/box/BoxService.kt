@@ -3,9 +3,8 @@ package ru.virgil.spring.example.box
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.security.oauth.Security.getPrincipal
+import ru.virgil.spring.tools.security.Security.getSimpleCreator
 import java.util.*
-
 
 @Service
 class BoxService(
@@ -13,13 +12,17 @@ class BoxService(
 ) : BoxMapper {
 
     fun getAll(page: Int, size: Int): List<Box> =
-        boxRepository.findAllByCreatedByAndDeletedIsFalse(getPrincipal(), PageRequest.of(page, size))
+        boxRepository.findAllByCreatedByAndDeletedIsFalse(getSimpleCreator(), PageRequest.of(page, size))
 
     fun getAll(truck: Truck, page: Int, size: Int): List<Box> =
-        boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(getPrincipal(), truck, PageRequest.of(page, size))
+        boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
+            getSimpleCreator(),
+            truck,
+            PageRequest.of(page, size)
+        )
 
     fun get(uuid: UUID): Box =
-        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getPrincipal(), uuid).orElseThrow()
+        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getSimpleCreator(), uuid).orElseThrow()
 
     fun create(truck: Truck, boxDto: BoxDto): Box {
         val box = boxDto.toEntity(truck)
@@ -39,13 +42,13 @@ class BoxService(
     }
 
     fun getAllMyWeapons(): List<Box> =
-        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getPrincipal(), BoxType.WEAPON)
+        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getSimpleCreator(), BoxType.WEAPON)
 
-    fun countMy(): Long = boxRepository.countAllByCreatedByAndDeletedIsFalse(getPrincipal())
+    fun countMy(): Long = boxRepository.countAllByCreatedByAndDeletedIsFalse(getSimpleCreator())
 
     fun findBestBoxByTruck(truck: Truck): UUID? {
         val boxes = boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
-            getPrincipal(), truck, PageRequest.of(0, 1)
+            getSimpleCreator(), truck, PageRequest.of(0, 1)
         )
         return boxes.randomOrNull()?.uuid
     }

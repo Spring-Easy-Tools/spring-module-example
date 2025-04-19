@@ -7,9 +7,9 @@ import java.time.ZonedDateTime
 import java.util.*
 
 data class TruckDto(
-    override var createdAt: ZonedDateTime?,
-    override var updatedAt: ZonedDateTime?,
-    override var uuid: UUID?,
-    var boxesCount: Int?,
-    var bestBoxUUID: UUID?,
+    override var createdAt: ZonedDateTime? = null,
+    override var updatedAt: ZonedDateTime? = null,
+    override var uuid: UUID? = null,
+    var boxesCount: Int? = null,
+    var bestBoxUUID: UUID? = null,
 ) : IdentifiedDto, TimedDto

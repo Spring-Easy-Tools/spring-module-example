@@ -1,11 +1,13 @@
 package ru.virgil.spring.example.chat
 
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.virgil.spring.example.security.SecurityUser
 import ru.virgil.spring.tools.util.data.Identified
 import ru.virgil.spring.tools.util.data.Owned
 import ru.virgil.spring.tools.util.data.Timed
@@ -31,6 +33,5 @@ class ChatMessage(
     override lateinit var createdAt: ZonedDateTime
 
     @CreatedBy
-    @ManyToOne
-    override lateinit var createdBy: SecurityUser
+    override lateinit var createdBy: String
 }

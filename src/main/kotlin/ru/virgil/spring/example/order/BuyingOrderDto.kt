@@ -6,8 +6,8 @@ import java.time.ZonedDateTime
 import java.util.*
 
 class BuyingOrderDto(
-    override var createdAt: ZonedDateTime?,
-    override var updatedAt: ZonedDateTime?,
-    override var uuid: UUID?,
-    var description: String?,
+    override var createdAt: ZonedDateTime? = null,
+    override var updatedAt: ZonedDateTime? = null,
+    override var uuid: UUID? = null,
+    var description: String? = null,
 ) : IdentifiedDto, TimedDto

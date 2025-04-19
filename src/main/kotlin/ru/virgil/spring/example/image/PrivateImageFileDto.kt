@@ -7,8 +7,8 @@ import java.time.ZonedDateTime
 import java.util.*
 
 data class PrivateImageFileDto(
-    override var uuid: UUID?,
-    override var createdAt: ZonedDateTime?,
-    override var updatedAt: ZonedDateTime?,
-    var name: String?,
+    override var uuid: UUID? = null,
+    override var createdAt: ZonedDateTime? = null,
+    override var updatedAt: ZonedDateTime? = null,
+    var name: String? = null,
 ) : IdentifiedDto, TimedDto

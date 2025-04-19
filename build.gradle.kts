@@ -1,7 +1,7 @@
 plugins {
-    id("org.springframework.boot") version "3.4.1"
+    id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
-    val kotlinVersion = "2.1.0"
+    val kotlinVersion = "2.1.20"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
@@ -24,16 +24,20 @@ dependencies {
     // Зависимости Spring
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-json")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.security:spring-security-messaging")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.security:spring-security-test")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
@@ -42,6 +46,8 @@ dependencies {
     implementation("net.datafaker:datafaker:1.9.0")
     implementation("org.zalando:logbook-spring-boot-starter:3.6.0")
     implementation("io.mikael:urlbuilder:2.0.9")
+    implementation("com.google.api-client:google-api-client:2.4.0")
+    implementation("org.instancio:instancio-core:5.4.0")
 
     // Зависимости для тестирования
     testImplementation("org.awaitility:awaitility:4.2.1")

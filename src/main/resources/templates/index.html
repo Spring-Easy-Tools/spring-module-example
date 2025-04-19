@@ -5,10 +5,38 @@
     <title>Stats</title>
 </head>
 <body>
-<p>Index works! Live Reloaded!</p>
+<h1>🚚 Logistics Hub Stats 🚛</h1>
+<p>Index works! Live Reloaded! Test!</p>
 <h3>All statistic:</h3>
 <p th:text="${all_stats}">All Stats are not working!</p>
 <h3>My statistic:</h3>
 <p th:text="${my_stats}">My Stats are not working!</p>
+<form th:action="@{/login}" method="get" th:if="${anon == true}">
+    <button type="submit">Authenticate</button>
+</form>
+<form th:action="@{/logout}" method="post" th:if="${anon == false}">
+    <button type="submit">Logout</button>
+</form>
+<h3>My user:</h3>
+<p th:text="|Authentication type: ${auth_type}|">Auth type not work!</p>
+<form method="post" th:action="@{/user_settings}" th:if="${anon == false}">
+    <button type="submit">Create internal user</button>
+</form>
+<pre th:utext="${user_settings}">Auth type not work!</pre>
+<h3>Trucker's chat:</h3>
+<ul id="stomp-messages"></ul>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<script>
+    const socket = new WebSocket("ws://localhost:8080/ws");
+    const stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/my_stats', function (message) {
+            const ul = document.getElementById('stomp-messages');
+            const li = document.createElement('li');
+            li.textContent = message.body;
+            ul.appendChild(li);
+        });
+    });
+</script>
 </body>
 </html>

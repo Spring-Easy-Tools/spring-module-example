@@ -1,7 +1,6 @@
 package ru.virgil.spring.example.image
 
 import org.springframework.core.io.ResourceLoader
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.image.ImageProperties
@@ -22,7 +21,7 @@ class ImageService(
     imageProperties,
 ) {
 
-    override fun createPrivateImageFile(uuid: UUID, owner: UserDetails, imageFilePath: Path): PrivateImageFile {
+    override fun createPrivateImageFile(uuid: UUID, owner: String, imageFilePath: Path): PrivateImageFile {
         val privateImageFile = PrivateImageFile(imageFilePath)
         privateImageFile.uuid = uuid
         return privateImageFile

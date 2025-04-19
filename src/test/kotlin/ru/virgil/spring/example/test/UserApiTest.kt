@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.user.UserSettingsDto
+import ru.virgil.spring.example.user.UserSettingsService
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.toolsBasePackage
 
@@ -19,10 +20,12 @@ import ru.virgil.spring.tools.toolsBasePackage
 @WithMockFirebaseUser
 class UserApiTest @Autowired constructor(
     val fluent: Fluent,
+    private val userSettingsService: UserSettingsService,
 ) {
 
     @Test
     fun get() {
+        if (userSettingsService.get() != null) userSettingsService.delete()
         val createdUserSettingsDto: UserSettingsDto = fluent.request { post { "/user_settings" } }
         val currentUserSettingsDto: UserSettingsDto = fluent.request { get { "/user_settings" } }
         createdUserSettingsDto shouldBeEqual currentUserSettingsDto

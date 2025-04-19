@@ -2,6 +2,7 @@ package ru.virgil.spring.example.chat
 
 import io.exoquery.pprint
 import net.datafaker.Faker
+import org.mockito.Mockito
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -9,11 +10,10 @@ import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
-import ru.virgil.spring.example.security.SecurityUserRepository
-import ru.virgil.spring.example.security.SecurityUserService
+import ru.virgil.spring.tools.security.Security.getSimpleCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
-import ru.virgil.spring.tools.security.oauth.Security.getPrincipal
 import ru.virgil.spring.tools.util.logging.Logger
 import java.util.*
 
@@ -24,8 +24,8 @@ import java.util.*
 class ChatController(
     private val faker: Faker,
     private val webSocketMessaging: SimpMessagingTemplate,
-    private val securityUserService: SecurityUserService,
-    private val securityUserRepository: SecurityUserRepository,
+    // private val securityUserService: SecurityUserService,
+    // private val securityUserRepository: SecurityUserRepository,
     private val chatMessageRepository: ChatMessageRepository,
 ) {
 
@@ -33,7 +33,8 @@ class ChatController(
 
     @MessageMapping("/chat/send/{username}")
     fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: UUID) {
-        val userDetails = securityUserService.loadUserByUsername(username.toString())
+        // val userDetails = securityUserService.loadUserByUsername(username.toString())
+        val userDetails = Mockito.mock(UserDetails::class.java)
         logger.trace { "New user message! ${pprint(chatMessageDto)}" }
         var chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
         chatMessage = chatMessageRepository.save(chatMessage)
@@ -51,7 +52,7 @@ class ChatController(
         logger.trace { "New message! ${pprint(chatMessageDto)}" }
         val chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
         chatMessageRepository.save(chatMessage)
-        return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getPrincipal().username))
+        return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getSimpleCreator()))
     }
 
     @Scheduled(cron = "*/30 * * * * *")
