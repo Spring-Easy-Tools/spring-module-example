@@ -36,6 +36,10 @@ jobs:
           java-version: 21
           distribution: oracle
           cache: gradle
+      - name: Create credentials.yaml
+        run: |
+          mkdir -p src/main/resources/credentials
+          echo "${{ secrets.CREDENTIALS_YAML }}" > src/main/resources/credentials/credentials.yaml
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
