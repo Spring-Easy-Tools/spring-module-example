@@ -1,9 +1,8 @@
 package ru.virgil.spring.example.order
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import ru.virgil.spring.example.system.entity.OwnedRepository
 import java.util.*
 
 @Repository
-interface BuyingOrderGeneratorRepository : CrudRepository<BuyingOrder, UUID>, OwnedRepository<BuyingOrder>
+interface BuyingOrderGeneratorRepository : JpaRepository<BuyingOrder, UUID>

@@ -1,19 +1,19 @@
 package ru.virgil.spring.example.box
 
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import ru.virgil.spring.example.system.entity.OwnedRepository
 import ru.virgil.spring.example.truck.Truck
 import ru.virgil.spring.tools.security.Security
 import java.util.*
 
 @Repository
-interface BoxRepository : OwnedRepository<Box> {
+interface BoxRepository : JpaRepository<Box, UUID> {
 
     fun findByCreatedByAndUuidAndDeletedIsFalse(
         createdBy: String = Security.getSimpleCreator(),
         uuid: UUID,
-    ): Optional<Box>
+    ): Box?
 
     fun findAllByCreatedByAndDeletedIsFalse(
         createdBy: String = Security.getSimpleCreator(),

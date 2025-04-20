@@ -3,7 +3,6 @@ package ru.virgil.spring.example.user
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
-import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.security.Security.getSimpleCreator
@@ -14,13 +13,9 @@ import java.net.URI
 @Service
 class UserSettingsService(
     private val repository: UserSettingsRepository,
-    private val userDetailsManager: UserDetailsManager,
 ) : UserSettingsMapper {
 
-
-    fun get(): UserSettings? {
-        return repository.findByCreatedBy(getSimpleCreator())
-    }
+    fun get(): UserSettings? = repository.findByCreatedBy(getSimpleCreator())
 
     fun edit(userSettings: UserSettings): UserSettings {
         val currentUserSettings = get().orNotFound()
@@ -38,9 +33,7 @@ class UserSettingsService(
         return repository.save(userSettings)
     }
 
-    private fun formFallbackUserSettings(authentication: Authentication): UserSettings {
-        return UserSettings(authentication.name)
-    }
+    private fun formFallbackUserSettings(authentication: Authentication) = UserSettings(authentication.name)
 
     private fun formOauthUserSettings(authentication: OAuth2AuthenticationToken): UserSettings {
         val principal = authentication.principal as OidcUser
@@ -54,12 +47,5 @@ class UserSettingsService(
 
     fun delete() {
         repository.delete(get().orNotFound())
-    }
-
-    companion object {
-
-        private const val name = "user-details"
-        const val current = "current-$name"
-        const val mocking = "mocking-$name"
     }
 }

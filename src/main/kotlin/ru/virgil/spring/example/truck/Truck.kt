@@ -12,12 +12,6 @@ import ru.virgil.spring.tools.util.data.Timed
 import java.time.ZonedDateTime
 import java.util.*
 
-/**
- * Это фикс поведения JPA для двусторонних связей. Проблема тянется еще с JPA 2,
- * но ее не фиксят, чтобы не сломать совместимость. Читал на StackOverflow
- */
-private const val CONNECTION = "truck"
-
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class Truck(
@@ -38,4 +32,13 @@ class Truck(
     override lateinit var updatedAt: ZonedDateTime
 
     override var deleted: Boolean = false
+
+    companion object {
+
+        /**
+         * Это фикс поведения JPA для двусторонних связей. Проблема тянется еще с JPA 2,
+         * но ее не фиксят, чтобы не сломать совместимость. Читал на StackOverflow
+         */
+        const val CONNECTION = "truck"
+    }
 }

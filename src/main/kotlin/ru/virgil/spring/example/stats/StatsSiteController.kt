@@ -2,7 +2,6 @@ package ru.virgil.spring.example.stats
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import org.springframework.security.authentication.AnonymousAuthenticationToken
-import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -17,7 +16,6 @@ class StatsSiteController(
     private val statsService: StatsService,
     private val userSettingsService: UserSettingsService,
     private val yamlMapper: YAMLMapper,
-    private val userDetailsService: UserDetailsManager,
 ) : UserSettingsMapper {
 
     @ModelAttribute("user_settings")

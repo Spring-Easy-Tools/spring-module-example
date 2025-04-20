@@ -11,8 +11,13 @@ import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 @EnableJpaAuditing
 @EnableScheduling
 @ConfigurationPropertiesScan(BASE_PACKAGE)
-class SpringExampleApplication
+class SpringExampleApplication {
 
-fun main(args: Array<String>) {
-    runApplication<SpringExampleApplication>(*args)
+    companion object {
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<SpringExampleApplication>(*args)
+        }
+    }
 }

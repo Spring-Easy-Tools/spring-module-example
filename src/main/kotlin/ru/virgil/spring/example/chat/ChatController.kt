@@ -22,8 +22,6 @@ import ru.virgil.spring.tools.util.logging.Logger
 class ChatController(
     private val faker: Faker,
     private val webSocketMessaging: SimpMessagingTemplate,
-    // private val securityUserService: SecurityUserService,
-    // private val securityUserRepository: SecurityUserRepository,
     private val chatMessageRepository: ChatMessageRepository,
 ) {
 
@@ -32,8 +30,6 @@ class ChatController(
     // todo: переделать на дефолтную рассылку пользователям?
     @MessageMapping("/chat/send/{username}")
     fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: String) {
-        // val userDetails = securityUserService.loadUserByUsername(username.toString())
-        // val userDetails = Mockito.mock(UserDetails::class.java)
         logger.trace { "New user message! ${pprint(chatMessageDto)}" }
         var chatMessage = ChatMessage(chatMessageDto.text.orBadRequest("Message should contain text"), chatMessageDto.author)
         chatMessage = chatMessageRepository.save(chatMessage)
