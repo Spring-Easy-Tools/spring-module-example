@@ -13,12 +13,12 @@ import ru.virgil.spring.example.order.BuyingOrderGenerator
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.EasyRandomProvider
 import ru.virgil.spring.example.truck.TruckGenerator
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.util.logging.Logger
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class GeneratorTest @Autowired constructor(

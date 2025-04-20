@@ -5,12 +5,12 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.scheduling.annotation.EnableScheduling
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
-@SpringBootApplication(scanBasePackages = [toolsBasePackage])
+@SpringBootApplication(scanBasePackages = [BASE_PACKAGE])
 @EnableJpaAuditing
 @EnableScheduling
-@ConfigurationPropertiesScan(toolsBasePackage)
+@ConfigurationPropertiesScan(BASE_PACKAGE)
 class SpringExampleApplication
 
 fun main(args: Array<String>) {

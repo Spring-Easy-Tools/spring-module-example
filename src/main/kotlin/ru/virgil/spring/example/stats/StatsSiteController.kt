@@ -21,8 +21,8 @@ class StatsSiteController(
 ) : UserSettingsMapper {
 
     @ModelAttribute("user_settings")
-    fun getUserSettings(): String {
-        val userSettings = userSettingsService.get() ?: return "Not registered"
+    fun getUserSettings(): String? {
+        val userSettings = userSettingsService.get() ?: return null
         val userSettingsDto = userSettings.toDto()
         return yamlMapper.writerWithDefaultPrettyPrinter().writeValueAsString(userSettingsDto)
     }

@@ -16,11 +16,11 @@ import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.tools.testing.fluent.Fluent
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class BuyingOrderApiTest @Autowired constructor(

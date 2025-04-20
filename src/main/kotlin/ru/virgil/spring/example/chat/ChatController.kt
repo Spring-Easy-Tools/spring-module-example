@@ -2,7 +2,6 @@ package ru.virgil.spring.example.chat
 
 import io.exoquery.pprint
 import net.datafaker.Faker
-import org.mockito.Mockito
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -10,12 +9,11 @@ import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 import ru.virgil.spring.tools.security.Security.getSimpleCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http.orBadRequest
 import ru.virgil.spring.tools.util.logging.Logger
-import java.util.*
 
 // todo: Можно как-то так. А зачем?
 // @MessagingGateway
@@ -31,16 +29,17 @@ class ChatController(
 
     private val logger = Logger.inject(this::class.java)
 
+    // todo: переделать на дефолтную рассылку пользователям?
     @MessageMapping("/chat/send/{username}")
-    fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: UUID) {
+    fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: String) {
         // val userDetails = securityUserService.loadUserByUsername(username.toString())
-        val userDetails = Mockito.mock(UserDetails::class.java)
+        // val userDetails = Mockito.mock(UserDetails::class.java)
         logger.trace { "New user message! ${pprint(chatMessageDto)}" }
-        var chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
+        var chatMessage = ChatMessage(chatMessageDto.text.orBadRequest("Message should contain text"), chatMessageDto.author)
         chatMessage = chatMessageRepository.save(chatMessage)
         logger.trace { "Message saved to repository! ${pprint(chatMessage)}" }
         // Аннотации и методы по разному заворачивают пейлоад в сообщение
-        webSocketMessaging.convertAndSendToUser(userDetails!!.username, "/chat/my", chatMessageDto)
+        webSocketMessaging.convertAndSendToUser(username, "/chat/my", chatMessageDto)
     }
 
     /**
@@ -50,7 +49,7 @@ class ChatController(
     @SendTo("/chat")
     fun send(@Payload chatMessageDto: ChatMessageDto): GenericMessage<ChatMessageDto> {
         logger.trace { "New message! ${pprint(chatMessageDto)}" }
-        val chatMessage = ChatMessage(chatMessageDto.text, chatMessageDto.author)
+        val chatMessage = ChatMessage(chatMessageDto.text.orBadRequest("Message should contain text"), chatMessageDto.author)
         chatMessageRepository.save(chatMessage)
         return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getSimpleCreator()))
     }

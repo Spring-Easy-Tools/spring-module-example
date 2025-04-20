@@ -8,19 +8,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.tools.security.cors.CorsProperties
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 // todo: перенести в Spring-модуль
-// @DirtiesContext
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 class CorsTest @Autowired constructor(
     private val mockMvc: MockMvc,
     private val corsProperties: CorsProperties,

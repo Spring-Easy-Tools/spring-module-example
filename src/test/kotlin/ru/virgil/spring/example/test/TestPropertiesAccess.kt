@@ -11,11 +11,11 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.tools.security.cors.CorsProperties
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class TestPropertiesAccess @Autowired constructor(

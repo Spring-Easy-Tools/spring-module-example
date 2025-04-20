@@ -10,11 +10,11 @@ import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.stats.StatsDto
 import ru.virgil.spring.tools.testing.fluent.Fluent
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class StatsApiTest @Autowired constructor(val fluent: Fluent) {

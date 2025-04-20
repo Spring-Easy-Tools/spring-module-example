@@ -18,12 +18,12 @@ import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.testing.fluent.Fluent
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import java.util.*
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ImageApiTest @Autowired constructor(

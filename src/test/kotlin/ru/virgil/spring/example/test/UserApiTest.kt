@@ -11,11 +11,11 @@ import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
 import ru.virgil.spring.example.user.UserSettingsDto
 import ru.virgil.spring.example.user.UserSettingsService
 import ru.virgil.spring.tools.testing.fluent.Fluent
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class UserApiTest @Autowired constructor(

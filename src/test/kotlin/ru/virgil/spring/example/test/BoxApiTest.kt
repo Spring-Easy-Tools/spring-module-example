@@ -22,11 +22,11 @@ import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.asserting.AssertUtils
 import ru.virgil.spring.tools.asserting.PartialMatcher
 import ru.virgil.spring.tools.testing.fluent.Fluent
-import ru.virgil.spring.tools.toolsBasePackage
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @WithMockFirebaseUser
 class BoxApiTest @Autowired constructor(

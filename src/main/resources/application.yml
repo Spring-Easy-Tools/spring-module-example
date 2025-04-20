@@ -24,22 +24,15 @@ logging:
       session: DEBUG
 
 spring:
+  config:
+    import: classpath:credentials/credentials.yaml
   output:
     ansi:
       enabled: always
   session:
     jdbc:
       initialize-schema: always
-  security:
-    user:
-      name: admin
-      password: f750cef3-fed1-4b52-ace3-8aac3ff1fa2f
-      roles: ADMIN
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
-          issuer-uri: https://securetoken.google.com/spring-tools-234ee
+  security: # credentials are in resources/credentials/credentials.yaml
   datasource:
 #    url: jdbc:postgresql://localhost:5432/postgres
     url: jdbc:h2:mem:default
@@ -67,3 +60,5 @@ images:
 web-socket:
   allow-auth-uri-query-parameter: true
   enabled: true
+  public-destinations:
+    - "/chat"
