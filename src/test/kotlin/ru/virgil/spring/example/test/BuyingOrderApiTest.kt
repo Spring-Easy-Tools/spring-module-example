@@ -12,7 +12,7 @@ import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.order.BuyingOrderDto
 import ru.virgil.spring.example.order.BuyingOrderGenerator
 import ru.virgil.spring.example.order.BuyingOrderMapper
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.tools.testing.fluent.Fluent
@@ -22,7 +22,7 @@ import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
-@WithMockFirebaseUser
+@WithMockedUser
 class BuyingOrderApiTest @Autowired constructor(
     private val fluent: Fluent,
     private val buyingOrderGenerator: BuyingOrderGenerator,

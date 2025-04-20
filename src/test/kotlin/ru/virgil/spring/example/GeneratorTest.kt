@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.order.BuyingOrderGenerator
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.system.EasyRandomProvider
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
@@ -20,7 +20,7 @@ import ru.virgil.spring.tools.util.logging.Logger
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
-@WithMockFirebaseUser
+@WithMockedUser
 class GeneratorTest @Autowired constructor(
     private val buyingOrderGenerator: BuyingOrderGenerator,
     private val boxGenerator: BoxGenerator,

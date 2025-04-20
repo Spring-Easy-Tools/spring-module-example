@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
 import ru.virgil.spring.example.image.PrivateImageFileDto
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
@@ -35,7 +35,7 @@ class ImageApiTest @Autowired constructor(
 
     private val imageMimeTypePattern = "image/"
 
-    @WithMockFirebaseUser
+    @WithMockedUser
     @Test
     fun postPrivateImage() {
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
@@ -45,7 +45,7 @@ class ImageApiTest @Autowired constructor(
         privateImageFileDto.shouldNotBeNull()
     }
 
-    @WithMockFirebaseUser
+    @WithMockedUser
     @Test
     fun getPrivateImage() {
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
@@ -58,7 +58,7 @@ class ImageApiTest @Autowired constructor(
         byteArray.size.shouldNotBeZero()
     }
 
-    @WithMockFirebaseUser
+    @WithMockedUser
     @Test
     fun getProtectedImage() {
         val byteArray: ByteArray = fluent.request { get { "/image/protected/image.jpg" } }
@@ -73,7 +73,7 @@ class ImageApiTest @Autowired constructor(
         byteArray.size.shouldNotBeZero()
     }
 
-    @WithMockFirebaseUser
+    @WithMockedUser
     @Test
     fun getNotExisting() {
         fluent.request<Any> {

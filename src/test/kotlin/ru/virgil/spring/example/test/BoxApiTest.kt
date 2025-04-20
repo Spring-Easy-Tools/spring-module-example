@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.virgil.spring.example.box.BoxDto
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.box.BoxType
-import ru.virgil.spring.example.roles.police.WithMockFirebasePoliceman
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.police.WithMockedPoliceman
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.asserting.AssertUtils
@@ -28,7 +28,7 @@ import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
-@WithMockFirebaseUser
+@WithMockedUser
 class BoxApiTest @Autowired constructor(
     override val assertUtils: AssertUtils,
     val faker: Faker,
@@ -115,7 +115,7 @@ class BoxApiTest @Autowired constructor(
     }
 
     @Test
-    @WithMockFirebasePoliceman
+    @WithMockedPoliceman
     fun createWeaponByPoliceman() {
         truckGenerator.generate().also { truckGenerator.repository.save(it) }
         val testDto = BoxDto(type = BoxType.WEAPON, description = "CREATED-BY-POLICEMAN", price = 50000, weight = 658f)
@@ -137,7 +137,7 @@ class BoxApiTest @Autowired constructor(
         // }
     }
 
-    @WithMockFirebasePoliceman
+    @WithMockedPoliceman
     @Test
     fun getAllWeaponsByPoliceman() {
         truckGenerator.generate().also { truckGenerator.repository.save(it) }

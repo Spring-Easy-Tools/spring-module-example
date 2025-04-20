@@ -10,14 +10,14 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.security.cors.CorsProperties
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 // todo: перенести в Spring-модуль
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockFirebaseUser
+@WithMockedUser
 @ComponentScan(BASE_PACKAGE)
 class CorsTest @Autowired constructor(
     private val mockMvc: MockMvc,

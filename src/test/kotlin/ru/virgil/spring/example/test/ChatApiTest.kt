@@ -16,7 +16,7 @@ import org.springframework.messaging.support.MessageBuilder
 import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.chat.ChatMessageDto
 import ru.virgil.spring.example.chat.ChatMessageRepository
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.testing.MessagingChannelInterceptor
 import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
@@ -29,7 +29,7 @@ import java.time.Duration
 @DirtiesContext
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
-@WithMockFirebaseUser
+@WithMockedUser
 @AutoConfigureMockMvc
 class ChatApiTest @Autowired constructor(
     /** Название каналов важно, они инжектятся по квалификатору */

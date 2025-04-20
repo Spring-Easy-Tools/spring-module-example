@@ -6,8 +6,8 @@ import ru.virgil.spring.example.security.SecurityRole
 
 @Retention(AnnotationRetention.RUNTIME)
 @WithSecurityContext(factory = MockPoliceSecurityContextFactory::class, setupBefore = TestExecutionEvent.TEST_METHOD)
-annotation class WithMockFirebasePoliceman(
+annotation class WithMockedPoliceman(
     val authorities: Array<SecurityRole> = [SecurityRole.ROLE_POLICE],
-    val firebaseUserId: String = "police-id",
-    val firebaseAuthToken: String = "police-auth-token",
+    val userId: String = "police-id",
+    val userSecret: String = "police-auth-token",
 )

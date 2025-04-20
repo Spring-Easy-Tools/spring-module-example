@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
-import ru.virgil.spring.example.roles.user.WithMockFirebaseUser
+import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.user.UserSettingsDto
 import ru.virgil.spring.example.user.UserSettingsService
 import ru.virgil.spring.tools.testing.fluent.Fluent
@@ -17,7 +17,7 @@ import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
-@WithMockFirebaseUser
+@WithMockedUser
 class UserApiTest @Autowired constructor(
     val fluent: Fluent,
     private val userSettingsService: UserSettingsService,
