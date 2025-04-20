@@ -11,10 +11,7 @@ import ru.virgil.spring.tools.security.mock.MockSecurityContextFactory
 class MockPoliceSecurityContextFactory(
     authenticationEventPublisher: AuthenticationEventPublisher,
     securityUserV2Manager: SecurityUserV2Manager,
-) : WithSecurityContextFactory<WithMockedPoliceman>, MockSecurityContextFactory(
-    authenticationEventPublisher = authenticationEventPublisher,
-    userDetailsManager = securityUserV2Manager
-) {
+) : WithSecurityContextFactory<WithMockedPoliceman>, MockSecurityContextFactory(securityUserV2Manager) {
 
     override fun createSecurityContext(annotation: WithMockedPoliceman) = mockSecurityContext {
         SecurityUserV2(

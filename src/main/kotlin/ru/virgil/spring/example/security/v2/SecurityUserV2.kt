@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.oauth2.core.user.OAuth2User
-import ru.virgil.spring.tools.util.data.Timed
+import ru.virgil.spring.tools.entity.Timed
 import java.time.ZonedDateTime
 
 @Entity

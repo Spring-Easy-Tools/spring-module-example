@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.order.BuyingOrderGenerator
 import ru.virgil.spring.example.truck.TruckGenerator
-import ru.virgil.spring.tools.util.data.Soft
+import ru.virgil.spring.tools.entity.Soft
 
 @Component
 class EasyRandomProvider {

@@ -7,10 +7,10 @@ import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import ru.virgil.spring.tools.entity.Columns
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.util.data.Identified
-import ru.virgil.spring.tools.util.data.Owned
-import ru.virgil.spring.tools.util.data.Soft
-import ru.virgil.spring.tools.util.data.Timed
+import ru.virgil.spring.tools.entity.Identified
+import ru.virgil.spring.tools.entity.Owned
+import ru.virgil.spring.tools.entity.Soft
+import ru.virgil.spring.tools.entity.Timed
 import java.time.ZonedDateTime
 import java.util.*
 

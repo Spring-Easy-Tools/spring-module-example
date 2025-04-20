@@ -17,12 +17,12 @@ import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.chat.ChatMessageDto
 import ru.virgil.spring.example.chat.ChatMessageRepository
 import ru.virgil.spring.example.roles.user.WithMockedUser
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.testing.MessagingChannelInterceptor
 import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingAnnotation
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingTemplate
-import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.util.logging.Logger
 import java.time.Duration
 
@@ -36,7 +36,6 @@ class ChatApiTest @Autowired constructor(
     val clientInboundChannel: AbstractSubscribableChannel,
     val clientOutboundChannel: AbstractSubscribableChannel,
     val brokerChannel: AbstractSubscribableChannel,
-    // val securityUserService: SecurityUserService,
     val objectMapper: ObjectMapper,
     private val chatMessageRepository: ChatMessageRepository,
 ) {

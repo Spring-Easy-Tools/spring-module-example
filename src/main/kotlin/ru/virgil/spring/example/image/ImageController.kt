@@ -19,11 +19,7 @@ import java.util.*
 class ImageController(
     private val imageService: ImageService,
     private val fileTypeService: FileTypeService,
-    // private val securityUserService: SecurityUserService,
 ) : ImageMapper {
-
-    // val securityUser by lazy { securityUserService.principal }
-    // val securityUser by lazy { Mockito.mock(SecurityUser::class.java).username }
 
     @GetMapping("/public/{imageName}")
     fun getPublic(@PathVariable imageName: String): ResponseEntity<ByteArray> {

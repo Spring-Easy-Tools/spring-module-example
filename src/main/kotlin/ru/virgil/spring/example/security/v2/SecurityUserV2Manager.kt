@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Component
-import ru.virgil.spring.tools.security.DefaultUserProperties
+import ru.virgil.spring.tools.security.user.DefaultUserProperties
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.util.Http.orNotFound
 import ru.virgil.spring.tools.util.Http.thenConflict

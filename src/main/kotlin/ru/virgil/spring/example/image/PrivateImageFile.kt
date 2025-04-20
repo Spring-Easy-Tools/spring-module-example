@@ -9,8 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import ru.virgil.spring.tools.image.PrivateImageInterface
-import ru.virgil.spring.tools.util.data.Soft
-import ru.virgil.spring.tools.util.data.Timed
+import ru.virgil.spring.tools.entity.Soft
+import ru.virgil.spring.tools.entity.Timed
 import java.nio.file.Path
 import java.time.ZonedDateTime
 import java.util.*

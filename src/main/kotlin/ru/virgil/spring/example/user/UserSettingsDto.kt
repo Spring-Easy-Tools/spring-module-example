@@ -1,7 +1,7 @@
 package ru.virgil.spring.example.user
 
-import ru.virgil.spring.example.system.dto.IdentifiedDto
-import ru.virgil.spring.example.system.dto.TimedDto
+import ru.virgil.spring.tools.dto.IdentifiedDto
+import ru.virgil.spring.tools.dto.TimedDto
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
