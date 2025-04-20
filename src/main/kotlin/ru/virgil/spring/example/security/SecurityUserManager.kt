@@ -1,4 +1,4 @@
-package ru.virgil.spring.example.security.v2
+package ru.virgil.spring.example.security
 
 import jakarta.annotation.PostConstruct
 import org.springframework.data.repository.findByIdOrNull
@@ -6,15 +6,15 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Component
-import ru.virgil.spring.tools.security.user.DefaultUserProperties
 import ru.virgil.spring.tools.security.Security
+import ru.virgil.spring.tools.security.user.DefaultUserProperties
 import ru.virgil.spring.tools.util.Http.orNotFound
 import ru.virgil.spring.tools.util.Http.thenConflict
 import kotlin.jvm.optionals.getOrNull
 
 @Component
-class SecurityUserV2Manager(
-    private val repository: SecurityUserV2Repository,
+class SecurityUserManager(
+    private val repository: SecurityUserRepository,
     private val defaultUserProperties: DefaultUserProperties?,
     private val passwordEncoder: PasswordEncoder,
 ) : UserDetailsManager {
@@ -24,23 +24,23 @@ class SecurityUserV2Manager(
     fun initDefaultUser() {
         if (defaultUserProperties == null) return
         if (!userExists(defaultUserProperties.name!!)) {
-            val securityUserV2 = SecurityUserV2(
+            val securityUser = SecurityUser(
                 id = defaultUserProperties.name!!,
                 roles = defaultUserProperties.roles!!.toSet(),
                 secret = passwordEncoder.encode(defaultUserProperties.password!!)
             )
-            createUser(securityUserV2)
+            createUser(securityUser)
         }
     }
 
     override fun createUser(user: UserDetails) {
-        val user = user as SecurityUserV2
+        val user = user as SecurityUser
         repository.findByIdOrNull(user.id).thenConflict()
         repository.save(user)
     }
 
     override fun updateUser(user: UserDetails) {
-        val user = user as SecurityUserV2
+        val user = user as SecurityUser
         repository.findByIdOrNull(user.id).orNotFound()
         repository.save(user)
     }
@@ -50,7 +50,7 @@ class SecurityUserV2Manager(
     }
 
     override fun changePassword(oldPassword: String, newPassword: String) {
-        val principal = Security.getAuthentication().principal as SecurityUserV2
+        val principal = Security.getAuthentication().principal as SecurityUser
         // Проверяем старый пароль через passwordEncoder
         if (!passwordEncoder.matches(oldPassword, principal.secret)) {
             throw SecurityException("Старый пароль неверен")

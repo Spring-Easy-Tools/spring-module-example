@@ -1,4 +1,4 @@
-package ru.virgil.spring.example.security.v2
+package ru.virgil.spring.example.security
 
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
@@ -10,17 +10,18 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.oauth2.core.user.OAuth2User
 import ru.virgil.spring.tools.entity.Timed
+import ru.virgil.spring.tools.security.user.UserSecurity.checkSecretHashed
 import java.time.ZonedDateTime
 
 @Entity
-class SecurityUserV2(
+class SecurityUser(
     @Id
     var id: String,
     @ElementCollection(String::class, FetchType.EAGER)
     var roles: Set<String>,
     secret: String? = null,
-    // todo: нужно ли? Если все равно берется из authentication.name
-    var principalName: String? = null,
+    @Transient
+    var oAuth2PrincipalName: String? = null,
     @Transient
     var oAuth2Attributes: Map<String?, *>? = null,
     @Transient
@@ -33,10 +34,7 @@ class SecurityUserV2(
 
     var secret: String? = secret
         set(value) {
-            if (value != null && !Regex("""^\{\w+}""").containsMatchIn(value)) {
-                throw SecurityException("Пароль должен быть захешированным и содержать префикс вида {bcrypt}, {noop} и т.д.")
-            }
-            field = value
+            field = value.checkSecretHashed()
         }
 
     @CreationTimestamp
@@ -53,7 +51,7 @@ class SecurityUserV2(
 
     override fun getUsername() = id
 
-    override fun getName(): String? = principalName
+    override fun getName(): String? = oAuth2PrincipalName
 
     override fun getClaims(): Map<String?, Any?>? = oidcClaims
 

@@ -21,5 +21,5 @@ class WebSocketSecurityConfig(
         }
         .simpDestMatchers("/police_channel/**").hasAuthority(SecurityRole.ROLE_POLICE.name)
         .anyMessage().authenticated()
-        .build()
+        .build()!!
 }
