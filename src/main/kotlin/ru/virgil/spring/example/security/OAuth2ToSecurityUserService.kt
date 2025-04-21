@@ -15,10 +15,9 @@ class OAuth2ToSecurityUserService(
     override fun findExistingUser(userRequest: OAuth2UserRequest) =
         userDetailsManager.loadUserByUsername(userRequest.clientRegistration.clientId) as SecurityUser?
 
-    override fun mapNewUser(userRequest: OAuth2UserRequest) = SecurityUser(
+    override fun mapUser(userRequest: OAuth2UserRequest) = SecurityUser(
         id = userRequest.clientRegistration.clientId,
         roles = setOf(SecurityRole.ROLE_USER.name, *userRequest.clientRegistration.scopes.toTypedArray()),
-        oAuth2PrincipalName = userRequest.clientRegistration.clientName,
-        oAuth2Attributes = userRequest.additionalParameters,
+        oauthUser = super.loadUser(userRequest),
     )
 }

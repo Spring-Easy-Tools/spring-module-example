@@ -16,8 +16,8 @@ class MockPoliceSecurityContextFactory(
     override fun createSecurityContext(annotation: WithMockedPoliceman) = mockSecurityContext {
         SecurityUser(
             id = annotation.userId,
+            roles = annotation.authorities.map { it.name }.toSet(),
             secret = annotation.userSecret,
-            roles = annotation.authorities.map { it.name }.toSet()
         )
     }
 }

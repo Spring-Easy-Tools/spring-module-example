@@ -4,6 +4,10 @@ import kotlin.io.path.name
 
 interface ImageMapper {
 
-    fun PrivateImageFile.toDto(): PrivateImageFileDto =
-        PrivateImageFileDto(uuid, createdAt, updatedAt, this.fileLocation.name)
+    fun PrivateImageFile.toDto() = PrivateImageFileDto(
+        uuid = uuid,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        name = this.fileLocation.name
+    )
 }

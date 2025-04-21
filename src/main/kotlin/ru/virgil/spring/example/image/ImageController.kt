@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.security.Security.getSimpleCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http
+import java.io.FileNotFoundException
 import java.nio.file.Paths
 import java.util.*
 
@@ -24,7 +26,11 @@ class ImageController(
     @GetMapping("/public/{imageName}")
     fun getPublic(@PathVariable imageName: String): ResponseEntity<ByteArray> {
         val filePath = Paths.get(imageService.getPublic(imageName).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }
@@ -33,7 +39,11 @@ class ImageController(
     @GetMapping("/protected/{imageName}")
     fun getProtected(@PathVariable imageName: String): ResponseEntity<ByteArray> {
         val filePath = Paths.get(imageService.getProtected(imageName).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }
@@ -42,7 +52,11 @@ class ImageController(
     @GetMapping("/private/{imageUuid}")
     fun getPrivate(@PathVariable imageUuid: UUID): ResponseEntity<ByteArray> {
         val filePath = Paths.get(imageService.getPrivate(getSimpleCreator(), imageUuid).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }

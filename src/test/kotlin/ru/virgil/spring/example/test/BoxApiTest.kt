@@ -44,7 +44,7 @@ class BoxApiTest @Autowired constructor(
     fun getAll() {
         boxGenerator.generate(100).also { boxGenerator.repository.saveAll(it) }
         val boxDtoList: MutableList<BoxDto> = fluent.request {
-            get { "/box?${RestValues.page}=$page&${RestValues.size}=$size" }
+            get { "/box?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size" }
         }
         boxDtoList.shouldNotBeEmpty()
     }
@@ -148,7 +148,7 @@ class BoxApiTest @Autowired constructor(
         }
         serverDto shouldBePartialEquals testDto
         val weaponDtoList: List<BoxDto> = fluent.request {
-            get { "/box/weapons?${RestValues.page}=$page&${RestValues.size}=$size" }
+            get { "/box/weapons?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size" }
         }
         weaponDtoList shouldContain serverDto
     }

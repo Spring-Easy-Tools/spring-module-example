@@ -25,8 +25,8 @@ class TruckController(
 
     @GetMapping("/{truckUuid}/box")
     fun getBoxesByTruck(
-        @PathVariable truckUuid: UUID, @RequestParam(RestValues.page) page: Int,
-        @RequestParam(RestValues.size) size: Int,
+        @PathVariable truckUuid: UUID, @RequestParam(RestValues.PAGE) page: Int,
+        @RequestParam(RestValues.SIZE) size: Int,
     ): List<BoxDto> {
         val truck = truckService.get(truckUuid).orNotFound()
         val boxes = boxService.getAll(truck, page, size)

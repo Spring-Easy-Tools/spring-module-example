@@ -18,7 +18,6 @@ import java.util.*
 @EntityListeners(AuditingEntityListener::class)
 class ChatMessage(
     val text: String,
-    // todo: нужно ли, после добавления @CreatedBy?
     val author: String?,
 ) : Identified, Timed, Owned {
 
