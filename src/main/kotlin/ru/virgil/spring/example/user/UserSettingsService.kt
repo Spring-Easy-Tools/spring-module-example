@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
 import ru.virgil.spring.tools.security.Security
-import ru.virgil.spring.tools.security.Security.getSimpleCreator
+import ru.virgil.spring.tools.security.Security.getCreator
 import ru.virgil.spring.tools.util.Http.orNotFound
 import ru.virgil.spring.tools.util.Http.thenConflict
 import java.net.URI
@@ -15,7 +15,7 @@ class UserSettingsService(
     private val repository: UserSettingsRepository,
 ) : UserSettingsMapper {
 
-    fun get(): UserSettings? = repository.findByCreatedBy(getSimpleCreator())
+    fun get(): UserSettings? = repository.findByCreatedBy(getCreator())
 
     fun edit(userSettings: UserSettings): UserSettings {
         val currentUserSettings = get().orNotFound()

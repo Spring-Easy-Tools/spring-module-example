@@ -3,7 +3,7 @@ package ru.virgil.spring.example.box
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.security.Security.getSimpleCreator
+import ru.virgil.spring.tools.security.Security.getCreator
 import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
@@ -13,17 +13,17 @@ class BoxService(
 ) : BoxMapper {
 
     fun getAll(page: Int, size: Int) =
-        boxRepository.findAllByCreatedByAndDeletedIsFalse(getSimpleCreator(), PageRequest.of(page, size))
+        boxRepository.findAllByCreatedByAndDeletedIsFalse(getCreator(), PageRequest.of(page, size))
 
     fun getAll(truck: Truck, page: Int, size: Int) =
         boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
-            getSimpleCreator(),
+            getCreator(),
             truck,
             PageRequest.of(page, size)
         )
 
     fun get(uuid: UUID) =
-        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getSimpleCreator(), uuid)
+        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getCreator(), uuid)
 
     fun create(truck: Truck, boxDto: BoxDto): Box {
         val box = boxDto.toEntity(truck)
@@ -43,13 +43,13 @@ class BoxService(
     }
 
     fun getAllMyWeaponBoxes() =
-        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getSimpleCreator(), BoxType.WEAPON)
+        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getCreator(), BoxType.WEAPON)
 
-    fun countMy() = boxRepository.countAllByCreatedByAndDeletedIsFalse(getSimpleCreator())
+    fun countMy() = boxRepository.countAllByCreatedByAndDeletedIsFalse(getCreator())
 
     fun findBestBoxByTruck(truck: Truck): UUID? {
         val boxes = boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
-            getSimpleCreator(), truck, PageRequest.of(0, 1)
+            getCreator(), truck, PageRequest.of(0, 1)
         )
         return boxes.randomOrNull()?.uuid
     }

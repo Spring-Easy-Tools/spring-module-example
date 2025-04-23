@@ -21,7 +21,7 @@ class ImageService(
     imageProperties,
 ) {
 
-    override fun createPrivateImageFile(uuid: UUID, owner: String, imageFilePath: Path): PrivateImageFile {
+    override fun createPrivateImageFile(uuid: UUID, creator: String, imageFilePath: Path): PrivateImageFile {
         val privateImageFile = PrivateImageFile(imageFilePath)
         privateImageFile.uuid = uuid
         return privateImageFile

@@ -11,25 +11,25 @@ import java.util.*
 interface BoxRepository : JpaRepository<Box, UUID> {
 
     fun findByCreatedByAndUuidAndDeletedIsFalse(
-        createdBy: String = Security.getSimpleCreator(),
+        createdBy: String = Security.getCreator(),
         uuid: UUID,
     ): Box?
 
     fun findAllByCreatedByAndDeletedIsFalse(
-        createdBy: String = Security.getSimpleCreator(),
+        createdBy: String = Security.getCreator(),
         pageable: Pageable,
     ): List<Box>
 
     fun findAllByCreatedByAndTruckAndDeletedIsFalse(
-        createdBy: String = Security.getSimpleCreator(),
+        createdBy: String = Security.getCreator(),
         truck: Truck,
         pageable: Pageable,
     ): List<Box>
 
-    fun countAllByCreatedByAndDeletedIsFalse(createdBy: String = Security.getSimpleCreator()): Long
+    fun countAllByCreatedByAndDeletedIsFalse(createdBy: String = Security.getCreator()): Long
 
     fun findAllByCreatedByAndTypeAndDeletedIsFalse(
-        createdBy: String = Security.getSimpleCreator(),
+        createdBy: String = Security.getCreator(),
         boxType: BoxType,
     ): List<Box>
 }

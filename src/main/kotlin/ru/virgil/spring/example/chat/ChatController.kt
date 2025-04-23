@@ -10,7 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
-import ru.virgil.spring.tools.security.Security.getSimpleCreator
+import ru.virgil.spring.tools.security.Security.getCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orBadRequest
 import ru.virgil.spring.tools.util.logging.Logger
@@ -47,7 +47,7 @@ class ChatController(
         logger.trace { "New message! ${pprint(chatMessageDto)}" }
         val chatMessage = ChatMessage(chatMessageDto.text.orBadRequest("Message should contain text"), chatMessageDto.author)
         chatMessageRepository.save(chatMessage)
-        return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getSimpleCreator()))
+        return GenericMessage(chatMessageDto.copy(author = chatMessageDto.author ?: getCreator()))
     }
 
     @Scheduled(cron = "*/30 * * * * *")
