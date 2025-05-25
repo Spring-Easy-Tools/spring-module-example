@@ -40,7 +40,7 @@ dependencies {
 
     // Third-party зависимости
     implementation("net.datafaker:datafaker:1.9.0")
-    implementation("org.zalando:logbook-spring-boot-starter:3.6.0")
+    implementation("org.zalando:logbook-spring-boot-starter:3.12.0")
     implementation("io.mikael:urlbuilder:2.0.9")
 
     // Зависимости для тестирования
