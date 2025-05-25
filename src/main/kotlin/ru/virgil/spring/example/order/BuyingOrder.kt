@@ -5,20 +5,21 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.virgil.spring.example.security.SecurityUser
+import ru.virgil.spring.tools.entity.Columns
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.util.data.Identified
-import ru.virgil.spring.tools.util.data.Owned
-import ru.virgil.spring.tools.util.data.Soft
-import ru.virgil.spring.tools.util.data.Timed
-import java.time.LocalDateTime
+import ru.virgil.spring.tools.entity.Identified
+import ru.virgil.spring.tools.entity.Owned
+import ru.virgil.spring.tools.entity.Soft
+import ru.virgil.spring.tools.entity.Timed
+import java.time.ZonedDateTime
 import java.util.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class BuyingOrder(
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.ALL])
     var truck: Truck,
+    @Column(columnDefinition = Columns.text)
     var description: String?,
 ) : Owned, Identified, Timed, Soft {
 
@@ -27,14 +28,13 @@ class BuyingOrder(
     override lateinit var uuid: UUID
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
     @CreatedBy
-    @ManyToOne
-    override lateinit var createdBy: SecurityUser
+    override lateinit var createdBy: String
 
     override var deleted: Boolean = false
 }

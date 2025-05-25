@@ -1,36 +1,51 @@
 package ru.virgil.spring.example.user
 
+import org.springframework.security.core.Authentication
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
-import ru.virgil.spring.example.security.SecurityUserService
+import ru.virgil.spring.tools.security.Security
+import ru.virgil.spring.tools.security.Security.getCreator
+import ru.virgil.spring.tools.util.Http.orNotFound
+import ru.virgil.spring.tools.util.Http.thenConflict
+import java.net.URI
 
 @Service
 class UserSettingsService(
     private val repository: UserSettingsRepository,
-    private val securityUserService: SecurityUserService,
 ) : UserSettingsMapper {
 
-    fun get(): UserSettings {
-        val securityUser = securityUserService.principal
-        return repository.findByCreatedBy(securityUser).orElseThrow()!!
-    }
+    fun get(): UserSettings? = repository.findByCreatedBy(getCreator())
 
     fun edit(userSettings: UserSettings): UserSettings {
-        val currentUserSettings = get()
+        val currentUserSettings = get().orNotFound()
         val editedUserSettings = currentUserSettings merge userSettings
         return repository.save(editedUserSettings)
     }
 
-    // @EventListener
-    // fun onSuccess(success: AuthenticationSuccessEvent?) {
-    //
-    //     principal = success!!.authentication.principal as SecurityUser
-    //     mocker.start()
-    // }
+    fun create(): UserSettings {
+        get().thenConflict()
+        val authentication = Security.getAuthentication()
+        val userSettings = when (authentication) {
+            is OAuth2AuthenticationToken -> formOauthUserSettings(authentication)
+            else -> formFallbackUserSettings(authentication)
+        }
+        return repository.save(userSettings)
+    }
 
-    companion object {
+    private fun formFallbackUserSettings(authentication: Authentication) = UserSettings(authentication.name)
 
-        private const val name = "user-details"
-        const val current = "current-$name"
-        const val mocking = "mocking-$name"
+    private fun formOauthUserSettings(authentication: OAuth2AuthenticationToken): UserSettings {
+        val principal = authentication.principal as OidcUser
+        val userSettings = UserSettings(
+            principal.fullName,
+            principal.email,
+            URI.create(principal.picture)
+        )
+        return userSettings
+    }
+
+    fun delete() {
+        repository.delete(get().orNotFound())
     }
 }

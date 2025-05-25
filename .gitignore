@@ -205,3 +205,5 @@ $RECYCLE.BIN/
 
 ### Project custom ignores ###
 /image
+credentials/
+!credentials/place_yaml_credentials_here

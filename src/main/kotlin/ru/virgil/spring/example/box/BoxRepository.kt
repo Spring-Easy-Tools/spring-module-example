@@ -1,32 +1,35 @@
 package ru.virgil.spring.example.box
 
 import org.springframework.data.domain.Pageable
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import ru.virgil.spring.example.system.entity.OwnedRepository
 import ru.virgil.spring.example.truck.Truck
+import ru.virgil.spring.tools.security.Security
 import java.util.*
 
 @Repository
-interface BoxRepository : OwnedRepository<Box> {
+interface BoxRepository : JpaRepository<Box, UUID> {
 
-    @Deprecated("Use Deleted False")
-    fun findByCreatedByAndUuid(createdBy: UserDetails, uuid: UUID): Optional<Box>
-    fun findByCreatedByAndUuidAndDeletedIsFalse(securityUser: UserDetails, uuid: UUID): Optional<Box>
+    fun findByCreatedByAndUuidAndDeletedIsFalse(
+        createdBy: String = Security.getCreator(),
+        uuid: UUID,
+    ): Box?
 
-    @Deprecated("Use Deleted False")
-    fun findAllByCreatedBy(createdBy: UserDetails, pageable: Pageable): List<Box>
-    fun findAllByCreatedByAndDeletedIsFalse(createdBy: UserDetails, pageable: Pageable): List<Box>
+    fun findAllByCreatedByAndDeletedIsFalse(
+        createdBy: String = Security.getCreator(),
+        pageable: Pageable,
+    ): List<Box>
 
-    @Deprecated("Use Deleted False")
-    fun findAllByCreatedByAndTruck(createdBy: UserDetails, truck: Truck, pageable: Pageable): List<Box>
-    fun findAllByCreatedByAndTruckAndDeletedIsFalse(createdBy: UserDetails, truck: Truck, pageable: Pageable): List<Box>
+    fun findAllByCreatedByAndTruckAndDeletedIsFalse(
+        createdBy: String = Security.getCreator(),
+        truck: Truck,
+        pageable: Pageable,
+    ): List<Box>
 
-    @Deprecated("Use Deleted False")
-    fun countAllByCreatedBy(createdBy: UserDetails): Long
-    fun countAllByCreatedByAndDeletedIsFalse(createdBy: UserDetails): Long
+    fun countAllByCreatedByAndDeletedIsFalse(createdBy: String = Security.getCreator()): Long
 
-    @Deprecated("Use Deleted False")
-    fun findAllByCreatedByAndType(createdBy: UserDetails, boxType: BoxType): List<Box>
-    fun findAllByCreatedByAndTypeAndDeletedIsFalse(createdBy: UserDetails, boxType: BoxType): List<Box>
+    fun findAllByCreatedByAndTypeAndDeletedIsFalse(
+        createdBy: String = Security.getCreator(),
+        boxType: BoxType,
+    ): List<Box>
 }

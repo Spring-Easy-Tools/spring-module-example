@@ -1,13 +1,12 @@
 package ru.virgil.spring.example.box
 
 import jakarta.annotation.security.RolesAllowed
-import jakarta.persistence.*
 import org.springframework.security.access.prepost.PostAuthorize
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckService
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
 @GlobalCors
@@ -17,19 +16,22 @@ class BoxController(
     private val truckService: TruckService,
     private val boxService: BoxService,
     private val boxSecurity: BoxSecurity,
+    private val boxGenerator: BoxGenerator,
 ) : BoxMapper {
 
-    @GetMapping
-    fun getAll(@RequestParam(RestValues.page) page: Int, @RequestParam(RestValues.size) size: Int): List<BoxDto> =
-        boxService.getAll(page, size).stream()
+    @GetMapping("/generate")
+    fun generate(@RequestParam portions: Int = 10) =
+        boxGenerator.generate(portions).let { boxGenerator.repository.saveAll(it) }
             .map { it.toDto() }
-            .toList()
+
+    @GetMapping
+    fun getAll(@RequestParam page: Int, @RequestParam size: Int) = boxService.getAll(page, size)
+        .map { it.toDto() }
 
     @RolesAllowed("ROLE_POLICE")
     @GetMapping("/weapons")
-    fun getAllWeapons(): List<BoxDto> = boxService.getAllMyWeapons().stream()
+    fun getAllWeapons() = boxService.getAllMyWeaponBoxes()
         .map { it.toDto() }
-        .toList()
 
     // TODO: Почему-то не работает, надо будет понять, почему.
     @PostAuthorize(
@@ -40,7 +42,7 @@ class BoxController(
     )
     @GetMapping("/{uuid}")
     fun get(@PathVariable uuid: UUID): BoxDto {
-        val box = boxService.get(uuid)
+        val box = boxService.get(uuid).orNotFound()
         return box.toDto()
     }
 
@@ -53,7 +55,7 @@ class BoxController(
     @PostMapping
     fun post(@RequestBody boxDto: BoxDto): BoxDto {
         // TODO: Заменить на Object Provider
-        val assignedTruck = truckService.assignTruck()
+        val assignedTruck = truckService.assignTruck().orNotFound()
         val createdBox = boxService.create(assignedTruck, boxDto)
         return createdBox.toDto()
     }

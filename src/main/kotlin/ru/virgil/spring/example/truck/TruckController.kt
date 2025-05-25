@@ -6,6 +6,7 @@ import ru.virgil.spring.example.box.BoxMapper
 import ru.virgil.spring.example.box.BoxService
 import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
 @GlobalCors
@@ -18,20 +19,17 @@ class TruckController(
 
     @GetMapping("/uuid")
     fun getTruck(uuid: UUID): TruckDto {
-        val truck = truckService.get(uuid)
+        val truck = truckService.get(uuid).orNotFound()
         return truck.toDto()
     }
 
     @GetMapping("/{truckUuid}/box")
     fun getBoxesByTruck(
-        @PathVariable truckUuid: UUID, @RequestParam(RestValues.page) page: Int,
-        @RequestParam(RestValues.size) size: Int,
+        @PathVariable truckUuid: UUID, @RequestParam(RestValues.PAGE) page: Int,
+        @RequestParam(RestValues.SIZE) size: Int,
     ): List<BoxDto> {
-        val truck = truckService.get(truckUuid)
+        val truck = truckService.get(truckUuid).orNotFound()
         val boxes = boxService.getAll(truck, page, size)
-        return boxes.stream()
-            .map { it.toDto() }
-            .toList()
+        return boxes.map { it.toDto() }
     }
-
 }

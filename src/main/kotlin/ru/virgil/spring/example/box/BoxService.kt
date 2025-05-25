@@ -3,23 +3,27 @@ package ru.virgil.spring.example.box
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import ru.virgil.spring.example.truck.Truck
-import ru.virgil.spring.tools.security.oauth.SecurityUserFunctions.getPrincipal
+import ru.virgil.spring.tools.security.Security.getCreator
+import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
-
 
 @Service
 class BoxService(
     private val boxRepository: BoxRepository,
 ) : BoxMapper {
 
-    fun getAll(page: Int, size: Int): List<Box> =
-        boxRepository.findAllByCreatedByAndDeletedIsFalse(getPrincipal(), PageRequest.of(page, size))
+    fun getAll(page: Int, size: Int) =
+        boxRepository.findAllByCreatedByAndDeletedIsFalse(getCreator(), PageRequest.of(page, size))
 
-    fun getAll(truck: Truck, page: Int, size: Int): List<Box> =
-        boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(getPrincipal(), truck, PageRequest.of(page, size))
+    fun getAll(truck: Truck, page: Int, size: Int) =
+        boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
+            getCreator(),
+            truck,
+            PageRequest.of(page, size)
+        )
 
-    fun get(uuid: UUID): Box =
-        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getPrincipal(), uuid).orElseThrow()
+    fun get(uuid: UUID) =
+        boxRepository.findByCreatedByAndUuidAndDeletedIsFalse(getCreator(), uuid)
 
     fun create(truck: Truck, boxDto: BoxDto): Box {
         val box = boxDto.toEntity(truck)
@@ -27,26 +31,26 @@ class BoxService(
     }
 
     fun edit(uuid: UUID, patchBox: BoxDto): Box {
-        var box = get(uuid)
+        var box = get(uuid).orNotFound()
         box = box merge patchBox
         return boxRepository.save(box)
     }
 
-    fun delete(uuid: UUID) {
-        val box = get(uuid)
+    fun delete(uuid: UUID): Box {
+        val box = get(uuid).orNotFound()
         box.deleted = true
-        boxRepository.save(box)
+        return boxRepository.save(box)
     }
 
-    fun getAllMyWeapons(): List<Box> =
-        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getPrincipal(), BoxType.WEAPON)
+    fun getAllMyWeaponBoxes() =
+        boxRepository.findAllByCreatedByAndTypeAndDeletedIsFalse(getCreator(), BoxType.WEAPON)
 
-    fun countMy(): Long = boxRepository.countAllByCreatedByAndDeletedIsFalse(getPrincipal())
+    fun countMy() = boxRepository.countAllByCreatedByAndDeletedIsFalse(getCreator())
 
-    fun findBestBoxByTruck(truck: Truck): UUID {
+    fun findBestBoxByTruck(truck: Truck): UUID? {
         val boxes = boxRepository.findAllByCreatedByAndTruckAndDeletedIsFalse(
-            getPrincipal(), truck, PageRequest.of(0, 1)
+            getCreator(), truck, PageRequest.of(0, 1)
         )
-        return boxes.random().uuid
+        return boxes.randomOrNull()?.uuid
     }
 }

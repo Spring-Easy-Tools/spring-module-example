@@ -16,26 +16,26 @@ import org.springframework.messaging.support.MessageBuilder
 import org.springframework.test.annotation.DirtiesContext
 import ru.virgil.spring.example.chat.ChatMessageDto
 import ru.virgil.spring.example.chat.ChatMessageRepository
-import ru.virgil.spring.tools.security.mock.MockSecurityContextFactory.Companion.mockSecurityContext
-import ru.virgil.spring.tools.security.oauth.SecurityUserService
+import ru.virgil.spring.example.roles.user.WithMockedUser
+import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
+import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.testing.MessagingChannelInterceptor
+import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingAnnotation
 import ru.virgil.spring.tools.testing.MessagingTestUtils.deserializeFromMessagingTemplate
-import ru.virgil.spring.tools.testing.MessagingTestUtils.awaitResult
-import ru.virgil.spring.tools.toolsBasePackage
 import ru.virgil.spring.tools.util.logging.Logger
 import java.time.Duration
 
 @DirtiesContext
 @SpringBootTest
-@ComponentScan(toolsBasePackage)
+@ComponentScan(BASE_PACKAGE)
+@WithMockedUser
 @AutoConfigureMockMvc
 class ChatApiTest @Autowired constructor(
     /** Название каналов важно, они инжектятся по квалификатору */
     val clientInboundChannel: AbstractSubscribableChannel,
     val clientOutboundChannel: AbstractSubscribableChannel,
     val brokerChannel: AbstractSubscribableChannel,
-    val securityUserService: SecurityUserService,
     val objectMapper: ObjectMapper,
     private val chatMessageRepository: ChatMessageRepository,
 ) {
@@ -62,7 +62,7 @@ class ChatApiTest @Autowired constructor(
 
         val destination = "/app/chat/send"
         val testingText = "STOMP Chat Test"
-        val authenticatedToken = securityUserService.mockSecurityContext()
+        val authenticatedToken = Security.getAuthentication()
 
         brokerChannelInterceptor.destinationPatterns.add("/chat")
 
@@ -78,7 +78,7 @@ class ChatApiTest @Autowired constructor(
         )
 
         clientInboundChannel.send(subscribeMessage)
-        clientInboundChannelInterceptor.awaitForMessage(subscribeDto.text)
+        clientInboundChannelInterceptor.awaitForMessage(subscribeDto.text!!)
 
         val sendHeaders = StompHeaderAccessor.create(StompCommand.SEND)
         sendHeaders.subscriptionId = "0"
@@ -93,7 +93,7 @@ class ChatApiTest @Autowired constructor(
 
         clientInboundChannel.send(sendMessage)
 
-        val sendReply: Message<*> = brokerChannelInterceptor.awaitForMessage(sendDto.text)
+        val sendReply: Message<*> = brokerChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingAnnotation(objectMapper)
 
         Truth.assertThat(sendReply).isNotNull()
@@ -114,7 +114,7 @@ class ChatApiTest @Autowired constructor(
     @Test
     fun `Chat User Sending`() {
 
-        val authenticatedToken = securityUserService.mockSecurityContext()
+        val authenticatedToken = Security.getAuthentication()
 
         val destination = "/app/chat/send/${authenticatedToken.name}"
         val subscription = "/user/${authenticatedToken.name}/chat/my"
@@ -132,7 +132,7 @@ class ChatApiTest @Autowired constructor(
         )
 
         clientInboundChannel.send(subscribeMessage)
-        clientInboundChannelInterceptor.awaitForMessage(subscribeDto.text)
+        clientInboundChannelInterceptor.awaitForMessage(subscribeDto.text!!)
 
         val sendHeaders = StompHeaderAccessor.create(StompCommand.SEND)
         sendHeaders.subscriptionId = "0"
@@ -147,7 +147,7 @@ class ChatApiTest @Autowired constructor(
 
         clientInboundChannel.send(sendMessage)
 
-        val sendReply: Message<*> = clientInboundChannelInterceptor.awaitForMessage(sendDto.text)
+        val sendReply: Message<*> = clientInboundChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingTemplate(objectMapper)
 
         Truth.assertThat(sendReply).isNotNull()

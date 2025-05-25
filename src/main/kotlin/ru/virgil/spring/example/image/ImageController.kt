@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import ru.virgil.spring.example.security.SecurityUserService
 import ru.virgil.spring.tools.image.FileTypeService
+import ru.virgil.spring.tools.security.Security.getCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http
+import java.io.FileNotFoundException
 import java.nio.file.Paths
 import java.util.*
 
@@ -19,15 +21,16 @@ import java.util.*
 class ImageController(
     private val imageService: ImageService,
     private val fileTypeService: FileTypeService,
-    private val securityUserService: SecurityUserService,
 ) : ImageMapper {
-
-    val securityUser by lazy { securityUserService.principal }
 
     @GetMapping("/public/{imageName}")
     fun getPublic(@PathVariable imageName: String): ResponseEntity<ByteArray> {
         val filePath = Paths.get(imageService.getPublic(imageName).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }
@@ -36,7 +39,11 @@ class ImageController(
     @GetMapping("/protected/{imageName}")
     fun getProtected(@PathVariable imageName: String): ResponseEntity<ByteArray> {
         val filePath = Paths.get(imageService.getProtected(imageName).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }
@@ -44,8 +51,12 @@ class ImageController(
     @PreAuthorize("isFullyAuthenticated()")
     @GetMapping("/private/{imageUuid}")
     fun getPrivate(@PathVariable imageUuid: UUID): ResponseEntity<ByteArray> {
-        val filePath = Paths.get(imageService.getPrivate(securityUser, imageUuid).uri)
-        val imageBytes = IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        val filePath = Paths.get(imageService.getPrivate(getCreator(), imageUuid).uri)
+        val imageBytes = try {
+            IOUtils.toByteArray(FileSystemResource(filePath).inputStream)
+        } catch (e: FileNotFoundException) {
+            throw Http.throwNotFound(filePath.javaClass, filePath, e)
+        }
         val imageMime = fileTypeService.getImageMimeType(imageBytes)
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
     }
@@ -56,7 +67,8 @@ class ImageController(
         @RequestParam image: MultipartFile,
         @RequestParam(required = false) imageName: String?,
     ): PrivateImageFileDto {
-        val privateFileImage = imageService.savePrivate(image.bytes, imageName ?: "static/image", securityUser)
+        val privateFileImage =
+            imageService.savePrivate(image.bytes, imageName ?: "image-name", getCreator())
         return privateFileImage.toDto()
     }
 }
