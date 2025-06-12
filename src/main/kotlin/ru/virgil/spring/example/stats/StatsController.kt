@@ -14,7 +14,7 @@ class StatsController(
 
     @GetMapping("/generate")
     fun generate() {
-        // todo: генерация всей статистики из одного места?
+        throw NotImplementedError("Генерация всей статистики из одного места пока не реализована")
     }
 
     @GetMapping("/all")
