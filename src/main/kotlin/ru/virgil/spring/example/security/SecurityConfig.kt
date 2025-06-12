@@ -13,7 +13,7 @@ import ru.virgil.spring.tools.security.SecurityProperties
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(jsr250Enabled = true)
 class SecurityConfig(
     private val securityProperties: SecurityProperties,
     private val oAuth2ToSecurityUserService: OAuth2ToSecurityUserService,

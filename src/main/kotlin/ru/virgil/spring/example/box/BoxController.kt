@@ -28,7 +28,7 @@ class BoxController(
     fun getAll(@RequestParam page: Int, @RequestParam size: Int) = boxService.getAll(page, size)
         .map { it.toDto() }
 
-    @RolesAllowed("ROLE_POLICE")
+    @RolesAllowed("POLICE")
     @GetMapping("/weapons")
     fun getAllWeapons() = boxService.getAllMyWeaponBoxes()
         .map { it.toDto() }

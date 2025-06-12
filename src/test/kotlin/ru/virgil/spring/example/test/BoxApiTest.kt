@@ -130,11 +130,10 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun getAllWeaponsByUsualUser() {
-        // TODO: Исправить работу @PostAuthorize
-        // fluent.request<Any> {
-        //     get { "/box/weapons?${RestValues.page}=$page&${RestValues.size}=$size" }
-        //     expect { status().isForbidden }
-        // }
+        fluent.request<Any> {
+            get { "/box/weapons?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size" }
+            expect { status().isForbidden }
+        }
     }
 
     @WithMockedPoliceman
