@@ -15,8 +15,6 @@ import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orBadRequest
 import ru.virgil.spring.tools.util.logging.Logger
 
-// todo: Можно как-то так. А зачем?
-// @MessagingGateway
 @GlobalCors
 @Controller
 class ChatController(
@@ -27,19 +25,26 @@ class ChatController(
 
     private val logger = Logger.inject(this::class.java)
 
-    // todo: переделать на дефолтную рассылку пользователям?
     @MessageMapping("/chat/send/{username}")
     fun sendToUser(@Payload chatMessageDto: ChatMessageDto, @DestinationVariable username: String) {
         logger.trace { "New user message! ${pprint(chatMessageDto)}" }
         var chatMessage = ChatMessage(chatMessageDto.text.orBadRequest("Message should contain text"), chatMessageDto.author)
         chatMessage = chatMessageRepository.save(chatMessage)
         logger.trace { "Message saved to repository! ${pprint(chatMessage)}" }
-        // Аннотации и методы по разному заворачивают пейлоад в сообщение
         webSocketMessaging.convertAndSendToUser(username, "/chat/my", chatMessageDto)
     }
 
     /**
      * Чтобы прислать сюда сообщение, нужно отправлять в "/app/chat/send"
+     *
+     * Важно: разные способы отправки сообщений в Spring WebSocket (аннотации @SendTo, @MessageMapping и ручной вызов SimpMessagingTemplate)
+     * могут по-разному сериализовать ("заворачивать") payload в итоговое сообщение для клиента.
+     *
+     * Например:
+     * - @SendTo возвращает результат метода, который Spring может обернуть в GenericMessage или Map (см. https://docs.spring.io/spring-framework/reference/web/websocket/stomp/message-handling.html#websocket-stomp-message-mapping-return-values)
+     * - SimpMessagingTemplate.convertAndSend[ToUser] отправляет объект как есть, без дополнительной обёртки (https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/messaging/simp/SimpMessagingTemplate.html)
+     *
+     * Это может привести к разной структуре JSON на клиенте. Если важна единообразная структура сообщений — стоит явно контролировать сериализацию.
      * */
     @MessageMapping("/chat/send")
     @SendTo("/chat")

@@ -6,7 +6,6 @@ import ru.virgil.spring.tools.image.ImageMockService
 import ru.virgil.spring.tools.image.ImageProperties
 import ru.virgil.spring.tools.image.ImageService
 
-// TODO: Нужно ли?
 @Service
 class ImageMockService(
     imageService: ImageService<PrivateImageFile>,
