@@ -14,7 +14,6 @@ import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.security.cors.CorsProperties
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
-// todo: перенести в Spring-модуль
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockedUser

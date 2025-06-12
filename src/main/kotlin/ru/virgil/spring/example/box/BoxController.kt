@@ -33,7 +33,6 @@ class BoxController(
     fun getAllWeapons() = boxService.getAllMyWeaponBoxes()
         .map { it.toDto() }
 
-    // TODO: Почему-то не работает, надо будет понять, почему.
     @PostAuthorize(
         """
         hasRole('ROLE_POLICE') and @boxSecurity.hasWeapon(returnObject)
