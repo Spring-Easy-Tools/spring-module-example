@@ -53,7 +53,6 @@ class BoxController(
     )
     @PostMapping
     fun post(@RequestBody boxDto: BoxDto): BoxDto {
-        // TODO: Заменить на Object Provider
         val assignedTruck = truckService.assignTruck().orNotFound()
         val createdBox = boxService.create(assignedTruck, boxDto)
         return createdBox.toDto()
