@@ -1,3 +1,4 @@
 [submodule "spring-module-tools"]
 	path = spring-module-tools
 	url = https://github.com/ViRGiL175/spring-module-tools.git
+	branch = master
