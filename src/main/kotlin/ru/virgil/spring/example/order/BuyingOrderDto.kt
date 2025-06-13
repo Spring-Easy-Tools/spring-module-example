@@ -1,12 +1,13 @@
 package ru.virgil.spring.example.order
 
-import ru.virgil.spring.example.system.dto.IdentifiedDto
-import java.time.LocalDateTime
+import ru.virgil.spring.tools.dto.IdentifiedDto
+import ru.virgil.spring.tools.dto.TimedDto
+import java.time.ZonedDateTime
 import java.util.*
 
 class BuyingOrderDto(
-    override var createdAt: LocalDateTime?,
-    override var updatedAt: LocalDateTime?,
-    override var uuid: UUID?,
-    var description: String?,
-) : IdentifiedDto
+    override var createdAt: ZonedDateTime? = null,
+    override var updatedAt: ZonedDateTime? = null,
+    override var uuid: UUID? = null,
+    var description: String? = null,
+) : IdentifiedDto, TimedDto

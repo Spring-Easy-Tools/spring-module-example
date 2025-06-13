@@ -2,11 +2,11 @@ package ru.virgil.spring.example.order
 
 import org.springframework.web.bind.annotation.*
 import ru.virgil.spring.example.box.BoxService
-import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.example.truck.TruckMapper
 import ru.virgil.spring.example.truck.TruckService
 import ru.virgil.spring.tools.security.cors.GlobalCors
+import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
 @GlobalCors
@@ -19,30 +19,23 @@ class BuyingOrderController(
 ) : BuyingOrderMapper, TruckMapper {
 
     @GetMapping
-    fun getAll(
-        @RequestParam(RestValues.page) page: Int,
-        @RequestParam(RestValues.size) size: Int,
-    ): List<BuyingOrderDto> =
-        buyingOrderService.getAll(page, size).stream()
-            .map { it.toDto() }
-            .toList()
+    fun getAll(@RequestParam page: Int, @RequestParam size: Int) = buyingOrderService.getAll(page, size)
+        .map { it.toDto() }
 
     @GetMapping("/{uuid}")
     operator fun get(@PathVariable uuid: UUID): BuyingOrderDto {
-        val buyingOrder = buyingOrderService.get(uuid)
+        val buyingOrder = buyingOrderService.get(uuid).orNotFound()
         return buyingOrder.toDto()
     }
 
     @GetMapping("/{buyingOrderUuid}/truck")
     fun getTrucksByOrder(
         @PathVariable buyingOrderUuid: UUID,
-        @RequestParam(RestValues.page) page: Int,
-        @RequestParam(RestValues.size) size: Int,
+        @RequestParam page: Int,
+        @RequestParam size: Int,
     ): List<TruckDto> {
-        val buyingOrder = buyingOrderService.get(buyingOrderUuid)
+        val buyingOrder = buyingOrderService.get(buyingOrderUuid).orNotFound()
         val trucks = truckService.getAll(buyingOrder, page, size)
-        return trucks.stream()
-            .map { it.toDto() }
-            .toList()
+        return trucks.map { it.toDto() }
     }
 }

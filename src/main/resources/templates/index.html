@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stats</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://github.com/livereload/livereload-js/raw/master/dist/livereload.js?host=localhost"></script>
+</head>
+<body>
+<h1>🚚 Logistics Hub Stats 🚛</h1>
+<p>Index works! Live Reloaded! Test!</p>
+<h2>All statistic:</h2>
+<p th:text="${all_stats}">All Stats are not working!</p>
+<h2>My statistic:</h2>
+<p th:text="${my_stats}">My Stats are not working!</p>
+<form th:action="@{/login}" method="get" th:if="${anon == true}">
+    <button type="submit">Authenticate</button>
+</form>
+<form th:action="@{/logout}" method="post" th:if="${anon == false}">
+    <button type="submit">Logout</button>
+</form>
+<h2>My user:</h2>
+<p th:text="|Authentication type: ${auth_type}|">Auth type not work!</p>
+<form method="post" th:action="@{/user_settings}" th:if="${anon == false} and ${user_settings == null}">
+    <button type="submit">Create User Settings</button>
+</form>
+<h4 th:if="${user_settings != null}">User settings:</h4>
+<pre th:utext="${user_settings}?: 'Not registered'">User Settings not work!</pre>
+<h2>Trucker's chat:</h2>
+<ul id="stomp-messages"></ul>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<script>
+    // Получаем CSRF-токен из мета-тега, если он есть (Spring по умолчанию кладёт его в <meta name="_csrf" ...>)
+    function getCsrfToken() {
+        const meta = document.querySelector('meta[name="_csrf"]');
+        return meta ? meta.getAttribute('content') : null;
+    }
+    function getCsrfHeader() {
+        const meta = document.querySelector('meta[name="_csrf_header"]');
+        return meta ? meta.getAttribute('content') : "X-CSRF-TOKEN";
+    }
+
+    const socket = new WebSocket("ws://localhost:8080/ws");
+    const stompClient = StompJs.Stomp.over(socket);
+
+    stompClient.connect({
+        [getCsrfHeader()]: getCsrfToken()
+    }, function (frame) {
+        stompClient.subscribe('/chat', function (message) {
+            const ul = document.getElementById('stomp-messages');
+            const li = document.createElement('li');
+            // Заменяем \n на <br> и используем innerHTML для отображения переносов
+            li.innerHTML = message.body.replace(/\n/g, "<br>");
+            ul.appendChild(li);
+        });
+    });
+</script>
+</body>
+</html>

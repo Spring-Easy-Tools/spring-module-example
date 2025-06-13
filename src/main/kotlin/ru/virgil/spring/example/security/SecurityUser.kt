@@ -3,36 +3,49 @@ package ru.virgil.spring.example.security
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import ru.virgil.spring.tools.security.oauth.SecurityUser
-import ru.virgil.spring.tools.util.data.Identified
-import ru.virgil.spring.tools.util.data.Timed
-import java.time.LocalDateTime
-import java.util.*
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.oauth2.core.user.OAuth2User
+import ru.virgil.spring.tools.entity.Timed
+import ru.virgil.spring.tools.security.user.UserSecurity.checkSecretHashed
+import java.time.ZonedDateTime
 
 @Entity
 class SecurityUser(
-    override val firebaseUserId: String,
-    userAuthorities: MutableCollection<SecurityUserAuthority>,
-    override val springUsername: String = UUID.randomUUID().toString(),
-    override val springPassword: String = UUID.randomUUID().toString(),
-    // TODO: Настроить базовый Entity на использование стандартных интерфейсов
-) : SecurityUser, Identified, Timed {
-
     @Id
-    @GeneratedValue
-    override lateinit var uuid: UUID
+    var id: String,
+    @ElementCollection(String::class, FetchType.EAGER)
+    var roles: Set<String>,
+    secret: String? = null,
+    @Transient
+    val oauthUser: OAuth2User? = null,
+) : UserDetails, OAuth2User, OidcUser, Timed {
+
+    var secret = secret
+        set(value) {
+            field = value.checkSecretHashed()
+        }
 
     @CreationTimestamp
-    override lateinit var createdAt: LocalDateTime
+    override lateinit var createdAt: ZonedDateTime
 
     @UpdateTimestamp
-    override lateinit var updatedAt: LocalDateTime
+    override lateinit var updatedAt: ZonedDateTime
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    override val springAuthorities: MutableCollection<String> = userAuthorities.map { it.toString() }.toMutableSet()
+    override fun getAuthorities() = roles.map { SimpleGrantedAuthority(it) }
 
-    override val springAccountNonExpired: Boolean = true
-    override val springAccountNonLocked: Boolean = true
-    override val springCredentialsNonExpired: Boolean = true
-    override val springEnabled: Boolean = true
+    override fun getPassword() = secret
+
+    override fun getUsername() = id
+
+    override fun getAttributes() = oauthUser!!.attributes
+
+    override fun getName() = oauthUser!!.name
+
+    override fun getClaims() = (oauthUser as OidcUser).claims
+
+    override fun getUserInfo() = (oauthUser as OidcUser).userInfo
+
+    override fun getIdToken() = (oauthUser as OidcUser).idToken
 }

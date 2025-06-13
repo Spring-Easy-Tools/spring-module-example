@@ -8,8 +8,7 @@ server:
     encoding:
       force: true
     session:
-      # timeout: 604800 # Week in seconds
-      timeout: 7d # Testing
+      timeout: 7d
 
 logging:
   level:
@@ -25,18 +24,15 @@ logging:
       session: DEBUG
 
 spring:
+  config:
+    import: classpath:credentials/credentials.yaml
   output:
     ansi:
       enabled: always
   session:
     jdbc:
       initialize-schema: always
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
-          issuer-uri: https://securetoken.google.com/spring-tools-234ee
+  security: # credentials are in resources/credentials/credentials.yaml
   datasource:
 #    url: jdbc:postgresql://localhost:5432/postgres
     url: jdbc:h2:mem:default
@@ -49,12 +45,14 @@ spring:
 
 security:
   cors:
-    origins: http://localhost:4200, https://spring-tools.ru
+    origins: http://localhost:8080
     exposed-headers: X-Auth-Token
+    allow-credentials: true
   anonymous-paths:
     - "/actuator/**"
     - "/image/public/**"
     - "/ping"
+    - "/"
 
 images:
   clean-on-shutdown: true
@@ -62,3 +60,5 @@ images:
 web-socket:
   allow-auth-uri-query-parameter: true
   enabled: true
+  public-destinations:
+    - "/chat"

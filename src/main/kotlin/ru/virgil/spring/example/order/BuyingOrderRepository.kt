@@ -1,18 +1,20 @@
 package ru.virgil.spring.example.order
 
-
 import org.springframework.data.domain.Pageable
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import ru.virgil.spring.example.system.entity.OwnedRepository
 import ru.virgil.spring.example.truck.Truck
+import ru.virgil.spring.tools.security.Security
 import java.util.*
 
 @Repository
-interface BuyingOrderRepository : OwnedRepository<BuyingOrder> {
+interface BuyingOrderRepository: JpaRepository<BuyingOrder, UUID> {
 
-    fun findAllByCreatedBy(createdBy: UserDetails, pageable: Pageable): List<BuyingOrder>
-    fun findByCreatedByAndUuid(createdBy: UserDetails, uuid: UUID): Optional<BuyingOrder>
-    fun countAllByCreatedBy(createdBy: UserDetails): Long
+    fun findAllByCreatedBy(createdBy: String = Security.getCreator(), pageable: Pageable): List<BuyingOrder>
+
+    fun findByCreatedByAndUuid(createdBy: String = Security.getCreator(), uuid: UUID): BuyingOrder?
+
+    fun countAllByCreatedBy(createdBy: String = Security.getCreator()): Long
+
     fun findAllByTruck(truck: Truck, pageable: Pageable): List<BuyingOrder>
 }

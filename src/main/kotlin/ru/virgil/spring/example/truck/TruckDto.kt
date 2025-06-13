@@ -1,13 +1,15 @@
 package ru.virgil.spring.example.truck
 
-import ru.virgil.spring.example.system.dto.IdentifiedDto
-import java.time.LocalDateTime
+import ru.virgil.spring.tools.dto.IdentifiedDto
+import ru.virgil.spring.tools.dto.TimedDto
+import java.time.ZonedDateTime
+
 import java.util.*
 
 data class TruckDto(
-    override var createdAt: LocalDateTime?,
-    override var updatedAt: LocalDateTime?,
-    override var uuid: UUID?,
-    var boxesCount: Int?,
-    var bestBoxUUID: UUID,
-) : IdentifiedDto
+    override var createdAt: ZonedDateTime? = null,
+    override var updatedAt: ZonedDateTime? = null,
+    override var uuid: UUID? = null,
+    var boxesCount: Int? = null,
+    var bestBoxUUID: UUID? = null,
+) : IdentifiedDto, TimedDto
