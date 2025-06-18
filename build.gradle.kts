@@ -43,7 +43,7 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
 
     // Third-party зависимости
-    implementation("net.datafaker:datafaker:1.9.0")
+    implementation("net.datafaker:datafaker:2.4.3")
     implementation("org.zalando:logbook-spring-boot-starter:3.12.1")
     implementation("io.mikael:urlbuilder:2.0.9")
     implementation("com.google.api-client:google-api-client:2.4.0")
