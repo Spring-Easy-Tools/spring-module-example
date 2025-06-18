@@ -47,7 +47,7 @@ dependencies {
     implementation("org.zalando:logbook-spring-boot-starter:3.12.1")
     implementation("io.mikael:urlbuilder:2.0.9")
     implementation("com.google.api-client:google-api-client:2.4.0")
-    implementation("org.instancio:instancio-core:5.4.0")
+    implementation("org.instancio:instancio-core:5.4.1")
 
     // Зависимости для тестирования
     testImplementation("org.awaitility:awaitility:4.2.1")
