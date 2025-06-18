@@ -25,7 +25,7 @@ logging:
 
 spring:
   config:
-    import: classpath:credentials/credentials.yaml
+    import: optional:classpath:credentials/credentials.yaml
   output:
     ansi:
       enabled: always
