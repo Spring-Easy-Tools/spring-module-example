@@ -46,10 +46,3 @@ jobs:
           gradle-version: current
       - name: Run the tests
         run: ./gradlew test
-      - name: Publish Test Report
-        if: always()
-        uses: dorny/test-reporter@v2
-        with:
-          name: Gradle Tests
-          path: build/test-results/test/TEST-*.xml
-          reporter: java-junit
