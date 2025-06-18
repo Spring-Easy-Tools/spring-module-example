@@ -10,11 +10,11 @@ import ru.virgil.spring.tools.security.user.JpaUserDetailsManager
 @Component
 class SecurityUserManager(
     repository: SecurityUserRepository,
-    defaultUserProperties: DefaultUserProperties?,
+    defaultUserProperties: DefaultUserProperties,
     passwordEncoder: PasswordEncoder,
 ) : JpaUserDetailsManager(repository as JpaRepository<UserDetails, String>, defaultUserProperties, passwordEncoder) {
 
-    override fun mapPropertiesToUsed(defaultUserProperties: DefaultUserProperties): SecurityUser {
+    override fun mapPropertiesToUser(defaultUserProperties: DefaultUserProperties): SecurityUser {
         val properties = defaultUserProperties
         return SecurityUser(
             id = properties.name!!,
