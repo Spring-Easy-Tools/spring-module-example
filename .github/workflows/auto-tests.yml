@@ -44,4 +44,4 @@ jobs:
         with:
           gradle-version: current
       - name: Run the tests
-        run: ./gradlew test
+        run: ./gradlew test --info --stacktrace
