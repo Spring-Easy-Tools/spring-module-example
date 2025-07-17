@@ -62,3 +62,12 @@ web-socket:
   enabled: true
   public-destinations:
     - "/chat"
+
+image.service:
+  allowed-mime-type-regexes:
+    - .+/jpg
+    - .+/jpeg
+    - .+/png
+    - .+/gif
+    - .+/webp
+    - .+/svg

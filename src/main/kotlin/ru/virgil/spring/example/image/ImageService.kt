@@ -2,9 +2,8 @@ package ru.virgil.spring.example.image
 
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Service
-import ru.virgil.spring.tools.image.FileTypeService
-import ru.virgil.spring.tools.image.ImageProperties
-import ru.virgil.spring.tools.image.ImageService
+import ru.virgil.spring.tools.file.FileProperties
+import ru.virgil.spring.tools.file.type.FileTypeService
 import java.nio.file.Path
 import java.util.*
 
@@ -13,16 +12,20 @@ class ImageService(
     resourceLoader: ResourceLoader,
     privateImageRepository: PrivateImageRepository,
     fileTypeService: FileTypeService,
-    imageProperties: ImageProperties,
-) : ImageService<PrivateImageFile>(
+    fileProperties: FileProperties,
+) : ru.virgil.spring.tools.file.FileService<PrivateImageFile>(
     resourceLoader,
     privateImageRepository,
     fileTypeService,
-    imageProperties,
+    fileProperties,
 ) {
 
-    override fun createPrivateImageFile(uuid: UUID, creator: String, imageFilePath: Path): PrivateImageFile {
-        val privateImageFile = PrivateImageFile(imageFilePath)
+    override fun createPrivateFile(
+        uuid: UUID,
+        creator: String,
+        filePath: Path,
+    ): PrivateImageFile {
+        val privateImageFile = PrivateImageFile(filePath)
         privateImageFile.uuid = uuid
         return privateImageFile
     }

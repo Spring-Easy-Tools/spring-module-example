@@ -1,5 +1,6 @@
 package ru.virgil.spring.example.test
 
+import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.ints.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.string.shouldContain
@@ -12,13 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import ru.virgil.spring.example.image.ImageServiceProperties
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
 import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.tools.image.FileTypeService
-import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
+import ru.virgil.spring.tools.file.FileProperties
+import ru.virgil.spring.tools.file.type.FileTypeService
+import ru.virgil.spring.tools.testing.fluent.Fluent
 import java.util.*
 
 @DirtiesContext
@@ -31,6 +34,8 @@ class ImageApiTest @Autowired constructor(
     val imageMockService: ImageMockService,
     val imageService: ImageService,
     val fileTypeService: FileTypeService,
+    val imageServiceProperties: ImageServiceProperties,
+    val fileProperties: FileProperties,
 ) {
 
     private val imageMimeTypePattern = "image/"
@@ -38,23 +43,30 @@ class ImageApiTest @Autowired constructor(
     @WithMockedUser
     @Test
     fun postPrivateImage() {
+        val mockMultipartFile = imageMockService.mockAsMultipart()
+        val mockFileType = fileTypeService.detect(mockMultipartFile.inputStream)
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
             post { "/image/private" }
-            file { imageMockService.mockAsMultipart() }
+            file { mockMultipartFile }
         }
         privateImageFileDto.shouldNotBeNull()
+        mockFileType shouldContain imageMimeTypePattern
     }
 
     @WithMockedUser
     @Test
     fun getPrivateImage() {
+        val mockMultipartFile = imageMockService.mockAsMultipart()
+        val mockFileType = fileTypeService.detect(mockMultipartFile.inputStream)
         val privateImageFileDto: PrivateImageFileDto = fluent.request {
             post { "/image/private" }
-            file { imageMockService.mockAsMultipart() }
+            file { mockMultipartFile }
         }
         privateImageFileDto.shouldNotBeNull()
         val byteArray: ByteArray = fluent.request { get { "/image/private/${privateImageFileDto.uuid}" } }
-        fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
+        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        mimeType.name shouldContain imageMimeTypePattern
+        mimeType.name shouldBeEqual mockFileType
         byteArray.size.shouldNotBeZero()
     }
 
@@ -62,14 +74,16 @@ class ImageApiTest @Autowired constructor(
     @Test
     fun getProtectedImage() {
         val byteArray: ByteArray = fluent.request { get { "/image/protected/image.jpg" } }
-        fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
+        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        mimeType.name shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
     @Test
     fun getPublicImage() {
         val byteArray: ByteArray = fluent.request { get { "/image/public/image.jpg" } }
-        fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
+        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        mimeType.name shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
