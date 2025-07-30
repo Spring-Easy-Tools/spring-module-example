@@ -13,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import ru.virgil.spring.example.image.ImageServiceProperties
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
+import ru.virgil.spring.example.image.ImageServiceProperties
 import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
@@ -64,7 +64,7 @@ class ImageApiTest @Autowired constructor(
         }
         privateImageFileDto.shouldNotBeNull()
         val byteArray: ByteArray = fluent.request { get { "/image/private/${privateImageFileDto.uuid}" } }
-        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        val mimeType = fileTypeService.getMimeType(byteArray)
         mimeType.name shouldContain imageMimeTypePattern
         mimeType.name shouldBeEqual mockFileType
         byteArray.size.shouldNotBeZero()
@@ -74,7 +74,7 @@ class ImageApiTest @Autowired constructor(
     @Test
     fun getProtectedImage() {
         val byteArray: ByteArray = fluent.request { get { "/image/protected/image.jpg" } }
-        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        val mimeType = fileTypeService.getMimeType(byteArray)
         mimeType.name shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
@@ -82,7 +82,7 @@ class ImageApiTest @Autowired constructor(
     @Test
     fun getPublicImage() {
         val byteArray: ByteArray = fluent.request { get { "/image/public/image.jpg" } }
-        val mimeType = fileTypeService.getMimeType(byteArray, imageServiceProperties)
+        val mimeType = fileTypeService.getMimeType(byteArray)
         mimeType.name shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }

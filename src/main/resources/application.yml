@@ -71,3 +71,10 @@ image.service:
     - .+/gif
     - .+/webp
     - .+/svg
+  allowed-extensions:
+    - jpg
+    - jpeg
+    - png
+    - gif
+    - webp
+    - svg

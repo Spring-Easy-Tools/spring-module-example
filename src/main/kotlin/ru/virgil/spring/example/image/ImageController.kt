@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import ru.virgil.spring.tools.file.type.FileTypeConfig
 import ru.virgil.spring.tools.file.type.FileTypeService
 
 import ru.virgil.spring.tools.security.Security.getCreator
@@ -23,7 +22,7 @@ import java.util.*
 class ImageController(
     private val imageService: ImageService,
     private val fileTypeService: FileTypeService,
-    private val fileTypeConfig: FileTypeConfig,
+    private val imageServiceProperties: ImageServiceProperties,
 ) : ImageMapper {
 
     @GetMapping("/public/{imageName}")
@@ -34,7 +33,7 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getMimeType(imageBytes, fileTypeConfig)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
         val mediaType = MediaType.parseMediaType(imageMime.name)
         return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
@@ -48,7 +47,7 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getMimeType(imageBytes, fileTypeConfig)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
         val mediaType = MediaType.parseMediaType(imageMime.name)
         return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
@@ -62,7 +61,7 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getMimeType(imageBytes, fileTypeConfig)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
         val mediaType = MediaType.parseMediaType(imageMime.name)
         return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
@@ -75,7 +74,6 @@ class ImageController(
     ): PrivateImageFileDto {
         val privateFileImage = imageService.savePrivate(
             file.bytes,
-            fileTypeConfig,
             imageName ?: "image-name",
             getCreator()
         )
