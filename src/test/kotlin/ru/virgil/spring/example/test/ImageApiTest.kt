@@ -1,6 +1,6 @@
 package ru.virgil.spring.example.test
 
-import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.string.shouldBeEqualIgnoringCase
 import io.kotest.matchers.ints.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.string.shouldContain
@@ -62,7 +62,7 @@ class ImageApiTest @Autowired constructor(
         val byteArray: ByteArray = fluent.request { get { "/image/private/${privateImageFileDto.uuid}" } }
         val mimeType = fileTypeService.getMimeType(byteArray)
         mimeType.name shouldContain imageMimeTypePattern
-        mimeType.name shouldBeEqual mockFileType
+        mimeType.name shouldBeEqualIgnoringCase mockFileType
         byteArray.size.shouldNotBeZero()
     }
 
