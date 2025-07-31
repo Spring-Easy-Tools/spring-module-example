@@ -22,7 +22,6 @@ import java.util.*
 class ImageController(
     private val imageService: ImageService,
     private val fileTypeService: FileTypeService,
-    private val imageServiceProperties: ImageServiceProperties,
 ) : ImageMapper {
 
     @GetMapping("/public/{imageName}")
@@ -73,9 +72,7 @@ class ImageController(
         @RequestParam(required = false) imageName: String?,
     ): PrivateImageFileDto {
         val privateFileImage = imageService.savePrivate(
-            file.bytes,
-            imageName ?: "image-name",
-            getCreator()
+            file.bytes, imageName ?: "image-name", getCreator()
         )
         return privateFileImage.toDto()
     }

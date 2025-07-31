@@ -15,11 +15,9 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
-import ru.virgil.spring.example.image.ImageServiceProperties
 import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
-import ru.virgil.spring.tools.file.FileProperties
 import ru.virgil.spring.tools.file.type.FileTypeService
 import ru.virgil.spring.tools.testing.fluent.Fluent
 import java.util.*
@@ -34,8 +32,6 @@ class ImageApiTest @Autowired constructor(
     val imageMockService: ImageMockService,
     val imageService: ImageService,
     val fileTypeService: FileTypeService,
-    val imageServiceProperties: ImageServiceProperties,
-    val fileProperties: FileProperties,
 ) {
 
     private val imageMimeTypePattern = "image/"

@@ -14,7 +14,6 @@ class ImageService(
     privateImageRepository: PrivateImageRepository,
     fileTypeService: FileTypeService,
     val fileProperties: FileProperties,
-    val imageServiceProperties: ImageServiceProperties,
 ) : ru.virgil.spring.tools.file.FileService<PrivateImageFile>(
     resourceLoader,
     privateImageRepository,
@@ -37,6 +36,6 @@ class ImageService(
         name: String = fileProperties.defaultFileName,
         creator: String = getCreator(),
     ): PrivateImageFile {
-        return savePrivate(content, imageServiceProperties.allowedExtensions, name, creator)
+        return savePrivate(content, fileProperties.allowedExtensions, name, creator)
     }
 }

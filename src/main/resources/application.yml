@@ -54,23 +54,8 @@ security:
     - "/ping"
     - "/"
 
-images:
+files:
   clean-on-shutdown: true
-
-web-socket:
-  allow-auth-uri-query-parameter: true
-  enabled: true
-  public-destinations:
-    - "/chat"
-
-image.service:
-  allowed-mime-type-regexes:
-    - .+/jpg
-    - .+/jpeg
-    - .+/png
-    - .+/gif
-    - .+/webp
-    - .+/svg
   allowed-extensions:
     - jpg
     - jpeg
@@ -78,3 +63,9 @@ image.service:
     - gif
     - webp
     - svg
+
+web-socket:
+  allow-auth-uri-query-parameter: true
+  enabled: true
+  public-destinations:
+    - "/chat"
