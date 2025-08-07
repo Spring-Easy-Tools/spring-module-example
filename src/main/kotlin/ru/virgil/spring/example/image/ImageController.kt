@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import ru.virgil.spring.tools.image.FileTypeService
+import ru.virgil.spring.tools.file.type.FileTypeService
+
 import ru.virgil.spring.tools.security.Security.getCreator
 import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http
@@ -31,8 +32,9 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getImageMimeType(imageBytes)
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
+        val mediaType = MediaType.parseMediaType(imageMime.name)
+        return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
 
     @PreAuthorize("isFullyAuthenticated()")
@@ -44,8 +46,9 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getImageMimeType(imageBytes)
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
+        val mediaType = MediaType.parseMediaType(imageMime.name)
+        return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
 
     @PreAuthorize("isFullyAuthenticated()")
@@ -57,18 +60,20 @@ class ImageController(
         } catch (e: FileNotFoundException) {
             throw Http.throwNotFound(filePath.javaClass, filePath, e)
         }
-        val imageMime = fileTypeService.getImageMimeType(imageBytes)
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(imageMime)).body(imageBytes)
+        val imageMime = fileTypeService.getMimeType(imageBytes)
+        val mediaType = MediaType.parseMediaType(imageMime.name)
+        return ResponseEntity.ok().contentType(mediaType).body(imageBytes)
     }
 
     @PreAuthorize("isFullyAuthenticated()")
     @PostMapping("/private")
     fun postPrivate(
-        @RequestParam image: MultipartFile,
+        @RequestParam file: MultipartFile,
         @RequestParam(required = false) imageName: String?,
     ): PrivateImageFileDto {
-        val privateFileImage =
-            imageService.savePrivate(image.bytes, imageName ?: "image-name", getCreator())
+        val privateFileImage = imageService.savePrivate(
+            file.bytes, imageName ?: "image-name", getCreator()
+        )
         return privateFileImage.toDto()
     }
 }

@@ -54,8 +54,15 @@ security:
     - "/ping"
     - "/"
 
-images:
+files:
   clean-on-shutdown: true
+  allowed-extensions:
+    - jpg
+    - jpeg
+    - png
+    - gif
+    - webp
+    - svg
 
 web-socket:
   allow-auth-uri-query-parameter: true

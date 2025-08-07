@@ -8,16 +8,16 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import ru.virgil.spring.tools.image.PrivateImageInterface
 import ru.virgil.spring.tools.entity.Soft
 import ru.virgil.spring.tools.entity.Timed
+import ru.virgil.spring.tools.file.PrivateFile
 import java.nio.file.Path
 import java.time.ZonedDateTime
 import java.util.*
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-class PrivateImageFile(fileLocation: Path) : Timed, PrivateImageInterface, Soft {
+class PrivateImageFile(fileLocation: Path) : Timed, PrivateFile, Soft {
 
     @get:Transient
     override var fileLocation: Path
