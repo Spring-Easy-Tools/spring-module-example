@@ -29,7 +29,7 @@ class StatsSiteController(
     fun isAuthenticated() = Security.getAuthentication() is AnonymousAuthenticationToken
 
     @ModelAttribute("auth_type")
-    fun getAuthType(): String = Security.getAuthentication().javaClass.simpleName
+    fun getAuthType(): String = Security.getAuthentication()?.javaClass?.simpleName ?: "None"
 
     @ModelAttribute("all_stats")
     fun getAllStats() = statsService.getAllStats().toString()
