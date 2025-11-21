@@ -4,6 +4,19 @@
 
 This project has been successfully upgraded from Spring Boot 3.5.0 to Spring Boot 4.0.0 (released November 20, 2025).
 
+## Version Updates
+
+### Main Project
+- **Spring Boot**: 3.5.0 → 4.0.0
+- **Kotlin**: 2.1.21 → 2.2.21
+- **Gradle**: 8.14.2 → 9.2.1
+
+### Submodule (spring-module-tools)
+- **Spring Boot**: 3.5.0 → 4.0.0
+- **Kotlin**: 2.1.21 → 2.2.21
+
+All versions are now at their latest stable releases as of November 2025.
+
 ### Main Project Changes
 - ✅ Updated `build.gradle.kts` to Spring Boot 4.0.0
 - ✅ Fixed Spring Security API changes for nullable Authentication
