@@ -1,6 +1,6 @@
 package ru.virgil.spring.example.stats
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import tools.jackson.dataformat.yaml.YAMLMapper
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping

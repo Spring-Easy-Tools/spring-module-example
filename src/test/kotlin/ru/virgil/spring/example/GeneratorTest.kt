@@ -1,13 +1,14 @@
 package ru.virgil.spring.example
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.order.BuyingOrderGenerator
 import ru.virgil.spring.example.roles.user.WithMockedUser

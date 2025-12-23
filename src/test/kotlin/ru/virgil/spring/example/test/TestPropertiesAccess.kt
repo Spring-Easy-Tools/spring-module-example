@@ -5,19 +5,15 @@ import io.kotest.matchers.string.shouldNotBeEmpty
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
-import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.tools.security.cors.CorsProperties
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
+import ru.virgil.spring.tools.security.cors.CorsProperties
 
 @DirtiesContext
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
-@AutoConfigureMockMvc
-@WithMockedUser
 class TestPropertiesAccess @Autowired constructor(
     @Value("\${spring.datasource.url}")
     val default: String,
