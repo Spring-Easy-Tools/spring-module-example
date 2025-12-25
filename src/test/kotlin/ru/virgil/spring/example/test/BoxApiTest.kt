@@ -27,7 +27,7 @@ import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.asserting.AssertUtils
-import ru.virgil.spring.tools.asserting.PartialMatcher
+import ru.virgil.spring.tools.asserting.AssertUtils.Companion.shouldContainAllFieldsFrom
 import ru.virgil.spring.tools.testing.MockMvcExtensions.jsonBody
 import ru.virgil.spring.tools.testing.MockMvcExtensions.printResponse
 import ru.virgil.spring.tools.testing.MockMvcExtensions.readResponse
@@ -39,13 +39,13 @@ import tools.jackson.databind.ObjectMapper
 @AutoConfigureMockMvc
 @WithMockedUser
 class BoxApiTest @Autowired constructor(
-    override val assertUtils: AssertUtils,
+    val assertUtils: AssertUtils,
     val faker: Faker,
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper,
     private val boxGenerator: BoxGenerator,
     private val truckGenerator: TruckGenerator,
-) : PartialMatcher {
+) {
 
     private val page = 0
     private val size = 10
@@ -98,7 +98,7 @@ class BoxApiTest @Autowired constructor(
         }.andExpect {
             status { isOk() }
         }.readResponse(objectMapper)
-        createdDto shouldBePartialEquals testDto
+        createdDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${createdDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
@@ -118,7 +118,7 @@ class BoxApiTest @Autowired constructor(
         }.andExpect {
             status { isOk() }
         }.readResponse(objectMapper)
-        changedDto shouldBePartialEquals testDto
+        changedDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${changedDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
@@ -167,7 +167,7 @@ class BoxApiTest @Autowired constructor(
         }.andExpect {
             status { isOk() }
         }.readResponse(objectMapper)
-        createdDto shouldBePartialEquals testDto
+        createdDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${createdDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
@@ -197,7 +197,7 @@ class BoxApiTest @Autowired constructor(
         }.andExpect {
             status { isOk() }
         }.readResponse(objectMapper)
-        serverDto shouldBePartialEquals testDto
+        serverDto shouldContainAllFieldsFrom testDto
         val weaponDtoList: List<BoxDto> = mockMvc.get("/box/weapons?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size") {
             with(testSecurityContext())
         }.andExpect {

@@ -1,33 +1,27 @@
 package ru.virgil.spring.example.order
 
 import net.datafaker.Faker
-import org.jeasy.random.EasyRandom
-import org.jeasy.random.EasyRandomParameters
-import org.jeasy.random.FieldPredicates
+import org.instancio.Instancio
 import org.springframework.stereotype.Component
-import ru.virgil.spring.example.system.EasyRandomProvider
+import ru.virgil.spring.example.system.InstancioProvider
+import ru.virgil.spring.example.system.KSelect
+import java.util.function.Supplier
 
 @Component
 class BuyingOrderGenerator(
-    private val easyRandom: EasyRandom,
+    private val instancioProvider: InstancioProvider,
     override val repository: BuyingOrderGeneratorRepository,
-) : EasyRandomProvider.Generator<BuyingOrder> {
+) : InstancioProvider.Generator<BuyingOrder> {
+
+    private val faker = Faker()
 
     override fun generate(): BuyingOrder {
-        return easyRandom.nextObject(BuyingOrder::class.java)
+        return Instancio.of(instancioProvider.createModel(BuyingOrder::class.java))
+            .supply(KSelect.field(BuyingOrder::description), Supplier { faker.backToTheFuture().quote() })
+            .create()
     }
 
     override fun generate(count: Int): List<BuyingOrder> {
-        return easyRandom.objects(BuyingOrder::class.java, count).toList()
-    }
-
-    companion object : EasyRandomProvider.Parameters {
-
-        private val faker = Faker()
-
-        override fun apply(parameters: EasyRandomParameters): EasyRandomParameters {
-            return super.apply(parameters)
-                .randomize(FieldPredicates.named(BuyingOrder::description.name)) { faker.backToTheFuture().quote() }
-        }
+        return (1..count).map { generate() }
     }
 }

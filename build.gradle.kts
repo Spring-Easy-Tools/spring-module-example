@@ -34,8 +34,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.session:spring-session-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("org.springframework.security:spring-security-test")
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("tools.jackson.dataformat:jackson-dataformat-yaml")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

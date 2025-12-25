@@ -1,7 +1,8 @@
 package ru.virgil.spring.example.test
 
 import tools.jackson.databind.ObjectMapper
-import com.google.common.truth.Truth
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -96,14 +97,14 @@ class ChatApiTest @Autowired constructor(
         val sendReply: Message<*> = brokerChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingAnnotation(objectMapper)
 
-        Truth.assertThat(sendReply).isNotNull()
-        Truth.assertThat(replyDto.text).isEqualTo(testingText)
-        Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
+        sendReply.shouldNotBeNull()
+        replyDto.text shouldBe testingText
+        replyDto.author shouldBe authenticatedToken.name
 
         val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
-        Truth.assertThat(chatMessage).isNotNull()
-        Truth.assertThat(chatMessage.text).isEqualTo(testingText)
-        Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
+        chatMessage.shouldNotBeNull()
+        chatMessage.text shouldBe testingText
+        chatMessage.author shouldBe authenticatedToken.name
     }
 
     @Test
@@ -150,13 +151,13 @@ class ChatApiTest @Autowired constructor(
         val sendReply: Message<*> = clientInboundChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingTemplate(objectMapper)
 
-        Truth.assertThat(sendReply).isNotNull()
-        Truth.assertThat(replyDto.text).isEqualTo(testingText)
-        Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
+        sendReply.shouldNotBeNull()
+        replyDto.text shouldBe testingText
+        replyDto.author shouldBe authenticatedToken.name
 
         val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
-        Truth.assertThat(chatMessage).isNotNull()
-        Truth.assertThat(chatMessage.text).isEqualTo(testingText)
-        Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
+        chatMessage.shouldNotBeNull()
+        chatMessage.text shouldBe testingText
+        chatMessage.author shouldBe authenticatedToken.name
     }
 }

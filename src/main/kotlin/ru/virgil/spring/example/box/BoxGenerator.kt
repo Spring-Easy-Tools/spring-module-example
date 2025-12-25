@@ -1,31 +1,25 @@
 package ru.virgil.spring.example.box
 
 import net.datafaker.Faker
-import org.jeasy.random.EasyRandom
-import org.jeasy.random.EasyRandomParameters
-import org.jeasy.random.FieldPredicates
+import org.instancio.Instancio
 import org.springframework.stereotype.Component
-import ru.virgil.spring.example.system.EasyRandomProvider
+import ru.virgil.spring.example.system.InstancioProvider
+import ru.virgil.spring.example.system.KSelect
+import java.util.function.Supplier
 import kotlin.random.Random
 
 @Component
 class BoxGenerator(
-    private val easyRandom: EasyRandom,
+    private val instancioProvider: InstancioProvider,
     override val repository: BoxGeneratorRepository,
-) : EasyRandomProvider.Generator<Box> {
+) : InstancioProvider.Generator<Box> {
 
-    override fun generate() = easyRandom.nextObject(Box::class.java)
+    private val faker = Faker()
 
-    override fun generate(count: Int) = easyRandom.objects(Box::class.java, count).toList()
+    override fun generate(): Box = Instancio.of(instancioProvider.createModel(Box::class.java))
+        .supply(KSelect.field(Box::description), Supplier { faker.science().element() })
+        .supply(KSelect.field(Box::weight), Supplier { Random.nextLong(10, 10000).toFloat() })
+        .create()
 
-    companion object : EasyRandomProvider.Parameters {
-
-        private val faker = Faker()
-
-        override fun apply(parameters: EasyRandomParameters): EasyRandomParameters {
-            return super.apply(parameters)
-                .randomize(FieldPredicates.named(Box::description.name)) { faker.science().element() }
-                .randomize(FieldPredicates.named(Box::weight.name)) { Random.nextLong(10, 10000).toFloat() }
-        }
-    }
+    override fun generate(count: Int): List<Box> = (1..count).map { generate() }
 }

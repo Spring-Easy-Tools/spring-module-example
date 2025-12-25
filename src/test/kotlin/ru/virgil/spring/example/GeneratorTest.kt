@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.order.BuyingOrderGenerator
 import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.example.system.EasyRandomProvider
+import ru.virgil.spring.example.system.InstancioProvider
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.util.logging.Logger
@@ -31,7 +31,7 @@ class GeneratorTest @Autowired constructor(
 
     private val logger = Logger.inject(this::class.java)
 
-    private fun <Data : Any> testGenerator(generator: EasyRandomProvider.Generator<Data>) {
+    private fun <Data : Any> testGenerator(generator: InstancioProvider.Generator<Data>) {
         // Для полноценной работы все сущности должны быть CASCADE
         val generatedList = generator.generate(3).also { generator.repository.saveAll(it) }
         logger.info { objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(generatedList) }
