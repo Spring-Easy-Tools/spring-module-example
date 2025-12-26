@@ -6,12 +6,15 @@ import org.hibernate.annotations.UpdateTimestamp
 import org.instancio.Instancio
 import org.instancio.Model
 import org.instancio.Select
+import org.instancio.TargetSelector
 import org.instancio.settings.Keys
 import org.instancio.settings.Settings
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 import ru.virgil.spring.tools.entity.Soft
+import kotlin.reflect.KProperty1
+import kotlin.reflect.jvm.javaField
 
 @Component
 class InstancioProvider {
@@ -44,5 +47,22 @@ class InstancioProvider {
             .set(Select.field(Soft::deleted.name), false)
             .withSettings(Settings.create().set(Keys.COLLECTION_MIN_SIZE, 1).set(Keys.COLLECTION_MAX_SIZE, 10))
             .toModel()
+    }
+
+    /**
+     * Instancio selectors helper for Kotlin properties.
+     *
+     * Instancio's `Select.field(...)` method expects Java method references (e.g. `Pojo::getValue`).
+     * Kotlin property references (e.g. `Pojo::value`) are not always resolvable via that mechanism,
+     * therefore we resolve the backing Java field explicitly.
+     */
+    object KSelect {
+
+        fun <T : Any, V> field(property: KProperty1<T, V>): TargetSelector {
+            val javaField = requireNotNull(property.javaField) {
+                "Property '${property.name}' does not have a backing Java field"
+            }
+            return Select.field(javaField.declaringClass, javaField.name)
+        }
     }
 }

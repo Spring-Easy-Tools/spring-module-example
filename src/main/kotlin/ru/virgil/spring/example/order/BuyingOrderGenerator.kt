@@ -4,7 +4,7 @@ import net.datafaker.Faker
 import org.instancio.Instancio
 import org.springframework.stereotype.Component
 import ru.virgil.spring.example.system.InstancioProvider
-import ru.virgil.spring.example.system.KSelect
+import ru.virgil.spring.example.system.InstancioProvider.KSelect
 import java.util.function.Supplier
 
 @Component

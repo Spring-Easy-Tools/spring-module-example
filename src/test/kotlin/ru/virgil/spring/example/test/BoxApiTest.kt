@@ -23,7 +23,6 @@ import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.box.BoxType
 import ru.virgil.spring.example.roles.police.WithMockedPoliceman
 import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.example.system.rest.RestValues
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.asserting.AssertUtils
@@ -53,7 +52,7 @@ class BoxApiTest @Autowired constructor(
     @Test
     fun getAll() {
         boxGenerator.generate(100).also { boxGenerator.repository.saveAll(it) }
-        val boxDtoList: List<BoxDto> = mockMvc.get("/box?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size") {
+        val boxDtoList: List<BoxDto> = mockMvc.get("/box?page=$page&size=$size") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
@@ -178,7 +177,7 @@ class BoxApiTest @Autowired constructor(
 
     @Test
     fun getAllWeaponsByUsualUser() {
-        mockMvc.get("/box/weapons?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size") {
+        mockMvc.get("/box/weapons?page=$page&size=$size") {
             with(testSecurityContext())
         }.andExpect {
             status { isForbidden() }
@@ -198,7 +197,7 @@ class BoxApiTest @Autowired constructor(
             status { isOk() }
         }.readResponse(objectMapper)
         serverDto shouldContainAllFieldsFrom testDto
-        val weaponDtoList: List<BoxDto> = mockMvc.get("/box/weapons?${RestValues.PAGE}=$page&${RestValues.SIZE}=$size") {
+        val weaponDtoList: List<BoxDto> = mockMvc.get("/box/weapons?page=$page&size=$size") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
