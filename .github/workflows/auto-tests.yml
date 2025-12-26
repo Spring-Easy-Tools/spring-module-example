@@ -27,7 +27,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
       - name: Set up JDK
@@ -40,7 +40,7 @@ jobs:
           mkdir -p src/main/resources/credentials
           echo "${{ secrets.CREDENTIALS_YAML }}" > src/main/resources/credentials/credentials.yaml
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: wrapper
       - name: Run the tests
