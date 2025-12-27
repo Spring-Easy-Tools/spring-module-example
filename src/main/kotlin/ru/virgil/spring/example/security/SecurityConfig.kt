@@ -36,12 +36,15 @@ class SecurityConfig(
                 it.anyRequest().authenticated()
             }
             .httpBasic(Customizer.withDefaults())
-            .formLogin(Customizer.withDefaults())
+            .formLogin {
+                it.defaultSuccessUrl("/", true)
+            }
 
         // Создаем конфигурацию OAuth2 логина только если есть креденшиалсы OAuth2 клиентов
         val clientRegistrationRepository = clientRegistrationRepositoryProvider.getIfAvailable()
         if (clientRegistrationRepository != null) {
             http.oauth2Login { configurer ->
+                configurer.defaultSuccessUrl("/", true)
                 configurer.userInfoEndpoint { userInfoConfig ->
                     userInfoConfig.userService(oAuth2ToSecurityUserService)
                     userInfoConfig.oidcUserService(oidcToSecurityUserService)
