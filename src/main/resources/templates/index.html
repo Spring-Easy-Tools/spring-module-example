@@ -47,20 +47,33 @@
     stompClient.connect({
         [getCsrfHeader()]: getCsrfToken()
     }, function (frame) {
+        // Подписка на общий чат
         stompClient.subscribe('/chat', function (message) {
-            const ol = document.getElementById('stomp-messages');
-            const li = document.createElement('li');
-            const pre = document.createElement('pre');
-            try {
-                const json = JSON.parse(message.body);
-                pre.textContent = JSON.stringify(json, null, 2);
-            } catch (e) {
-                pre.textContent = message.body;
-            }
-            li.appendChild(pre);
-            ol.appendChild(li);
+            addMessage(message.body);
+        });
+        // Подписка на личные ошибки
+        stompClient.subscribe('/user/queue/errors', function (message) {
+            addMessage(message.body, true);
         });
     });
+
+    function addMessage(body, isError = false) {
+        const ol = document.getElementById('stomp-messages');
+        const li = document.createElement('li');
+        const pre = document.createElement('pre');
+        if (isError) {
+            pre.style.color = 'red';
+            pre.style.borderColor = 'red';
+        }
+        try {
+            const json = JSON.parse(body);
+            pre.textContent = JSON.stringify(json, null, 2);
+        } catch (e) {
+            pre.textContent = body;
+        }
+        li.appendChild(pre);
+        ol.appendChild(li);
+    }
 </script>
 </body>
 </html>

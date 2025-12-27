@@ -14,9 +14,14 @@ class WebSocketSecurityConfig(
 
     @Bean
     fun authorizationManager(messages: MessageMatcherDelegatingAuthorizationManager.Builder) = messages
+        // Это критически важно для служебных команд STOMP (CONNECT, DISCONNECT), иначе аноним не может даже начать сессию.
+        .nullDestMatcher().permitAll()
+        // Если что-то пойдет не так, сервер попытается отправить ошибку пользователю, и клиент должен иметь право её прочитать.
+        .simpSubscribeDestMatchers("/user/queue/errors").permitAll()
         .let {
             if (webSocketProperties.publicDestinations.isNotEmpty()) {
                 it.simpDestMatchers(*webSocketProperties.publicDestinations.toTypedArray()).permitAll()
+                it.simpSubscribeDestMatchers(*webSocketProperties.publicDestinations.toTypedArray()).permitAll()
             } else it
         }
         .simpDestMatchers("/police_channel/**").hasAuthority(SecurityRole.ROLE_POLICE.name)

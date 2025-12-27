@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.SecurityFilterChain
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.security.SecurityProperties
+import ru.virgil.spring.tools.websocket.WebSocketProperties
 
 
 @Configuration
@@ -18,6 +19,7 @@ import ru.virgil.spring.tools.security.SecurityProperties
 @EnableMethodSecurity(jsr250Enabled = true)
 class SecurityConfig(
     private val securityProperties: SecurityProperties,
+    private val webSocketProperties: WebSocketProperties,
     private val oAuth2ToSecurityUserService: OAuth2ToSecurityUserService,
     private val oidcToSecurityUserService: OidcToSecurityUserService,
     private val clientRegistrationRepositoryProvider: ObjectProvider<ClientRegistrationRepository>,
@@ -29,6 +31,8 @@ class SecurityConfig(
             .authorizeHttpRequests {
                 it.requestMatchers(*securityProperties.anonymousPaths.toTypedArray()).permitAll()
                 it.requestMatchers(*Security.defaultPublicPaths).permitAll()
+                // Разрешаем само подключение (Handshake) и все служебные запросы SockJS
+                it.requestMatchers("${webSocketProperties.startConnectionEndpoint}/**").permitAll()
                 it.anyRequest().authenticated()
             }
             .httpBasic(Customizer.withDefaults())
