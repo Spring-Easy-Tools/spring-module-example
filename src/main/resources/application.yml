@@ -17,23 +17,14 @@ logging:
       springframework: WARN
 
 spring:
+  profiles: # H2 and Postgres configs are in separate config files
+    active: h2
   config:
     import: optional:classpath:credentials/credentials.yaml
   output:
     ansi:
       enabled: always
-  session:
-    jdbc:
-      initialize-schema: always
-  sql:
-    init:
-      mode: always
   security: # credentials are in resources/credentials/credentials.yaml
-  datasource:
-#    url: jdbc:postgresql://localhost:5432/postgres
-    url: jdbc:h2:mem:default
-    username: postgres
-    password: af15be37-f9dd-4418-b219-19559fc31bff
   jpa:
     generate-ddl: true
     hibernate:
