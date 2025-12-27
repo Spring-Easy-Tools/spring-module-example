@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.options
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.security.cors.CorsProperties
@@ -89,6 +90,43 @@ class CorsTest @Autowired constructor(
                 assert(allowCredentials == "true") { "CORS should allow credentials, but got: $allowCredentials" }
             } else {
                 assert(allowCredentials == null || allowCredentials == "false") { "CORS should not allow credentials, but got: $allowCredentials" }
+            }
+        }
+    }
+
+    /**
+     * Проверяет, что разрешенные заголовки возвращаются в Access-Control-Allow-Headers при preflight запросе.
+     */
+    @Test
+    fun testAllowedHeaders() {
+        corsProperties.origins.forEach { origin ->
+            val headerToTest = corsProperties.allowedHeaders.firstOrNull()?.takeIf { it != "*" } ?: "Content-Type"
+
+            mockMvc.options("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, headerToTest)
+            }.andExpect {
+                status { isOk() }
+                header { exists(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS) }
+            }
+        }
+    }
+
+    /**
+     * Проверяет, что разрешенные методы возвращаются в Access-Control-Allow-Methods при preflight запросе.
+     */
+    @Test
+    fun testAllowedMethods() {
+        corsProperties.origins.forEach { origin ->
+            mockMvc.options("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+            }.andExpect {
+                status { isOk() }
+                header { exists(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS) }
             }
         }
     }
