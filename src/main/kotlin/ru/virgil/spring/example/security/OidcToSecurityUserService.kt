@@ -1,5 +1,6 @@
 package ru.virgil.spring.example.security
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.stereotype.Service
@@ -12,8 +13,11 @@ class OidcToSecurityUserService(
 
     override fun loadUser(userRequest: OidcUserRequest) = findOrMapUser(userRequest)
 
-    override fun findExistingUser(userRequest: OidcUserRequest) =
+    override fun findExistingUser(userRequest: OidcUserRequest): SecurityUser? = try {
         userDetailsManager.loadUserByUsername(userRequest.idToken.email) as SecurityUser?
+    } catch (_: UsernameNotFoundException) {
+        null
+    }
 
     override fun mapUser(userRequest: OidcUserRequest) = SecurityUser(
         id = userRequest.idToken.email,

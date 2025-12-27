@@ -6,8 +6,7 @@ server:
 logging:
   level:
     ru.virgil: INFO
-    org:
-      springframework: WARN
+    org.springframework: INFO
 
 spring:
   profiles: # H2 and Postgres configs are in separate config files

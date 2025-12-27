@@ -44,7 +44,6 @@ dependencies {
     // Third-party dependencies
     implementation("net.datafaker:datafaker:2.4.3")
     implementation("io.mikael:urlbuilder:2.0.9")
-    implementation("com.google.api-client:google-api-client:2.8.0")
     implementation("org.instancio:instancio-core:5.4.1")
 
     // Testing dependencies
