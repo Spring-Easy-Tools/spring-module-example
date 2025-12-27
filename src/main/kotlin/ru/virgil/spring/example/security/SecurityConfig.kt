@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfigurationSource
 import ru.virgil.spring.tools.security.Security
 import ru.virgil.spring.tools.security.SecurityProperties
 import ru.virgil.spring.tools.websocket.WebSocketProperties
@@ -20,6 +21,7 @@ import ru.virgil.spring.tools.websocket.WebSocketProperties
 class SecurityConfig(
     private val securityProperties: SecurityProperties,
     private val webSocketProperties: WebSocketProperties,
+    private val corsConfigurationSource: CorsConfigurationSource,
     private val oAuth2ToSecurityUserService: OAuth2ToSecurityUserService,
     private val oidcToSecurityUserService: OidcToSecurityUserService,
     private val clientRegistrationRepositoryProvider: ObjectProvider<ClientRegistrationRepository>,
@@ -28,6 +30,7 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .cors { it.configurationSource(corsConfigurationSource) }
             .authorizeHttpRequests {
                 it.requestMatchers(*securityProperties.anonymousPaths.toTypedArray()).permitAll()
                 it.requestMatchers(*Security.defaultPublicPaths).permitAll()

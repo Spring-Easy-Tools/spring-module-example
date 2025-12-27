@@ -4,11 +4,9 @@ import org.springframework.web.bind.annotation.*
 import ru.virgil.spring.example.box.BoxDto
 import ru.virgil.spring.example.box.BoxMapper
 import ru.virgil.spring.example.box.BoxService
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
-@GlobalCors
 @RestController
 @RequestMapping("/truck")
 class TruckController(
