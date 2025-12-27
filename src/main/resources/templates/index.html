@@ -28,7 +28,7 @@
 <h4 th:if="${user_settings != null}">User settings:</h4>
 <pre th:utext="${user_settings}?: 'Not registered'">User Settings not work!</pre>
 <h2>Trucker's chat:</h2>
-<ul id="stomp-messages"></ul>
+<ol id="stomp-messages"></ol>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 <script>
     // Получаем CSRF-токен из мета-тега, если он есть (Spring по умолчанию кладёт его в <meta name="_csrf" ...>)
@@ -48,11 +48,17 @@
         [getCsrfHeader()]: getCsrfToken()
     }, function (frame) {
         stompClient.subscribe('/chat', function (message) {
-            const ul = document.getElementById('stomp-messages');
+            const ol = document.getElementById('stomp-messages');
             const li = document.createElement('li');
-            // Заменяем \n на <br> и используем innerHTML для отображения переносов
-            li.innerHTML = message.body.replace(/\n/g, "<br>");
-            ul.appendChild(li);
+            const pre = document.createElement('pre');
+            try {
+                const json = JSON.parse(message.body);
+                pre.textContent = JSON.stringify(json, null, 2);
+            } catch (e) {
+                pre.textContent = message.body;
+            }
+            li.appendChild(pre);
+            ol.appendChild(li);
         });
     });
 </script>
