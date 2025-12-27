@@ -1,12 +1,5 @@
 server:
-  error:
-    include-message: always
-    include-binding-errors: always
-    include-exception: true
-    include-stacktrace: always
   servlet:
-    encoding:
-      force: true
     session:
       timeout: 7d
 
@@ -21,9 +14,18 @@ spring:
     active: h2
   config:
     import: optional:classpath:credentials/credentials.yaml
+  servlet:
+    encoding:
+      force: true
   output:
     ansi:
       enabled: always
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+      include-exception: true
+      include-stacktrace: always
   security: # credentials are in resources/credentials/credentials.yaml
   jpa:
     generate-ddl: true
