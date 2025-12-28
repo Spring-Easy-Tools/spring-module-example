@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -14,9 +16,7 @@ import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.user.UserSettingsDto
 import ru.virgil.spring.example.user.UserSettingsService
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
-import ru.virgil.spring.tools.testing.MockMvcExtensions.readResponse
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.fromJson
 import tools.jackson.databind.ObjectMapper
 
 @DirtiesContext
@@ -38,12 +38,12 @@ class UserApiTest @Autowired constructor(
             with(csrf())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         val currentUserSettingsDto: UserSettingsDto = mockMvc.get("/user_settings") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         createdUserSettingsDto shouldBeEqual currentUserSettingsDto
     }
 }

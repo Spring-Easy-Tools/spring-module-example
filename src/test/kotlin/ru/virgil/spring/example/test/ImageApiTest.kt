@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -20,9 +22,7 @@ import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 import ru.virgil.spring.tools.image.FileTypeService
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
-import ru.virgil.spring.tools.testing.MockMvcExtensions.readResponse
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.fromJson
 import tools.jackson.databind.ObjectMapper
 import java.util.*
 
@@ -50,7 +50,7 @@ class ImageApiTest @Autowired constructor(
             file(imageMockService.mockAsMultipart())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         privateImageFileDto.shouldNotBeNull()
     }
 
@@ -62,7 +62,7 @@ class ImageApiTest @Autowired constructor(
             file(imageMockService.mockAsMultipart())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         privateImageFileDto.shouldNotBeNull()
         val byteArray: ByteArray = mockMvc.get("/image/private/${privateImageFileDto.uuid}") {
             with(testSecurityContext())

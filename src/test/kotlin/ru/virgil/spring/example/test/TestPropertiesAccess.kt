@@ -1,5 +1,6 @@
 package ru.virgil.spring.example.test
 
+import io.kotest.equals.Equality.Companion.default
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.string.shouldNotBeEmpty
 import org.junit.jupiter.api.Test
@@ -15,12 +16,14 @@ import ru.virgil.spring.tools.security.cors.CorsProperties
 @SpringBootTest
 @ComponentScan(BASE_PACKAGE)
 class TestPropertiesAccess @Autowired constructor(
-    @Value("\${spring.datasource.url}")
-    val default: String,
     val corsProperties: CorsProperties,
-    @Value("\${security.cors.origins}")
-    val cors: List<String>,
 ) {
+
+    @Value("\${spring.datasource.url}")
+    lateinit var default: String
+
+    @Value("\${security.cors.origins}")
+    lateinit var cors: List<String>
 
     @Test
     fun accessDefaultProperty() {

@@ -13,11 +13,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 import ru.virgil.spring.example.box.BoxDto
 import ru.virgil.spring.example.box.BoxGenerator
 import ru.virgil.spring.example.box.BoxType
@@ -25,11 +21,11 @@ import ru.virgil.spring.example.roles.police.WithMockedPoliceman
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.truck.TruckGenerator
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
-import ru.virgil.spring.tools.asserting.AssertUtils
 import ru.virgil.spring.tools.asserting.AssertUtils.Companion.shouldContainAllFieldsFrom
-import ru.virgil.spring.tools.testing.MockMvcExtensions.jsonBody
-import ru.virgil.spring.tools.testing.MockMvcExtensions.printResponse
-import ru.virgil.spring.tools.testing.MockMvcExtensions.readResponse
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.fromJson
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.jsonBody
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.printRequest
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.printResponse
 import tools.jackson.databind.ObjectMapper
 
 @DirtiesContext
@@ -38,7 +34,6 @@ import tools.jackson.databind.ObjectMapper
 @AutoConfigureMockMvc
 @WithMockedUser
 class BoxApiTest @Autowired constructor(
-    val assertUtils: AssertUtils,
     val faker: Faker,
     val mockMvc: MockMvc,
     val objectMapper: ObjectMapper,
@@ -56,8 +51,9 @@ class BoxApiTest @Autowired constructor(
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.printResponse(objectMapper)
-            .readResponse(objectMapper)
+        }.andDo {
+            printResponse()
+        }.andReturn().fromJson()
         boxDtoList.shouldNotBeEmpty()
     }
 
@@ -70,7 +66,7 @@ class BoxApiTest @Autowired constructor(
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         boxDto.weight!! shouldBeGreaterThanOrEqual 10f
     }
 
@@ -80,9 +76,12 @@ class BoxApiTest @Autowired constructor(
         mockMvc.post("/box") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isBadRequest() }
+        }.andDo {
+            printRequest()
+            printResponse()
         }
     }
 
@@ -93,16 +92,16 @@ class BoxApiTest @Autowired constructor(
         val createdDto: BoxDto = mockMvc.post("/box") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         createdDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${createdDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         serverDto shouldBeEqual createdDto
     }
 
@@ -113,16 +112,16 @@ class BoxApiTest @Autowired constructor(
         val changedDto: BoxDto = mockMvc.put("/box/${randomBox.uuid}") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         changedDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${changedDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         serverDto shouldBeEqual changedDto
     }
 
@@ -148,7 +147,7 @@ class BoxApiTest @Autowired constructor(
         mockMvc.post("/box") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isForbidden() }
         }
@@ -162,16 +161,16 @@ class BoxApiTest @Autowired constructor(
         val createdDto: BoxDto = mockMvc.post("/box") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         createdDto shouldContainAllFieldsFrom testDto
         val serverDto: BoxDto = mockMvc.get("/box/${createdDto.uuid}") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         createdDto shouldBeEqual serverDto
     }
 
@@ -192,16 +191,16 @@ class BoxApiTest @Autowired constructor(
         val serverDto: BoxDto = mockMvc.post("/box") {
             with(testSecurityContext())
             with(csrf())
-            jsonBody(testDto, objectMapper)
+            with(jsonBody(testDto))
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         serverDto shouldContainAllFieldsFrom testDto
         val weaponDtoList: List<BoxDto> = mockMvc.get("/box/weapons?page=$page&size=$size") {
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         weaponDtoList shouldContain serverDto
     }
 }

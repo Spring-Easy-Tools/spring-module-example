@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import ru.virgil.spring.example.roles.user.WithMockedUser
 import ru.virgil.spring.example.stats.StatsDto
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
-import ru.virgil.spring.tools.testing.MockMvcExtensions.readResponse
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.fromJson
 import tools.jackson.databind.ObjectMapper
 
 @DirtiesContext
@@ -32,7 +32,7 @@ class StatsApiTest @Autowired constructor(
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         statsDto.shouldNotBeNull()
     }
 
@@ -42,7 +42,7 @@ class StatsApiTest @Autowired constructor(
             with(testSecurityContext())
         }.andExpect {
             status { isOk() }
-        }.readResponse(objectMapper)
+        }.andReturn().fromJson()
         statsDto.shouldNotBeNull()
     }
 }
