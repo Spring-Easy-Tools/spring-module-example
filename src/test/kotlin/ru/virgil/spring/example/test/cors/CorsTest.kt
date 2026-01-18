@@ -4,15 +4,17 @@ import net.datafaker.Faker
 import net.pearx.kasechange.toKebabCase
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.options
 import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.tools.security.cors.CorsProperties
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
+import ru.virgil.spring.tools.security.cors.CorsProperties
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,11 +32,13 @@ class CorsTest @Autowired constructor(
     @Test
     fun testAllowedOrigins() {
         corsProperties.origins.forEach { origin ->
-            mockMvc.get("/ping") { header(HttpHeaders.ORIGIN, origin) }
-                .andExpect {
-                    status { isOk() }
-                    header { string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, origin) }
-                }
+            mockMvc.get("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+            }.andExpect {
+                status { isOk() }
+                header { string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, origin) }
+            }
         }
     }
 
@@ -44,9 +48,12 @@ class CorsTest @Autowired constructor(
     @Test
     fun testNotAllowedOrigin() {
         val wrongOrigin = faker.domain().validDomain(faker.company().name().toKebabCase())
-        mockMvc.get("/ping") { header(HttpHeaders.ORIGIN, wrongOrigin) }
-            .andExpect { status { isForbidden() } }
-            .andDo { print() }
+        mockMvc.get("/ping") {
+            with(testSecurityContext())
+            header(HttpHeaders.ORIGIN, wrongOrigin)
+        }.andExpect {
+            status { isForbidden() }
+        }.andDo { print() }
     }
 
     /**
@@ -55,8 +62,10 @@ class CorsTest @Autowired constructor(
     @Test
     fun testExposedHeaders() {
         corsProperties.origins.forEach { origin ->
-            val result = mockMvc.get("/ping") { header(HttpHeaders.ORIGIN, origin) }
-                .andReturn()
+            val result = mockMvc.get("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+            }.andReturn()
             val exposedHeaders = result.response.getHeaderValue(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS)
             corsProperties.exposedHeaders.forEach { header ->
                 assert(exposedHeaders?.toString()?.contains(header) == true) {
@@ -72,13 +81,52 @@ class CorsTest @Autowired constructor(
     @Test
     fun testAllowCredentials() {
         corsProperties.origins.forEach { origin ->
-            val result = mockMvc.get("/ping") { header(HttpHeaders.ORIGIN, origin) }
-                .andReturn()
+            val result = mockMvc.get("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+            }.andReturn()
             val allowCredentials = result.response.getHeaderValue(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS)
             if (corsProperties.allowCredentials) {
                 assert(allowCredentials == "true") { "CORS should allow credentials, but got: $allowCredentials" }
             } else {
                 assert(allowCredentials == null || allowCredentials == "false") { "CORS should not allow credentials, but got: $allowCredentials" }
+            }
+        }
+    }
+
+    /**
+     * Проверяет, что разрешенные заголовки возвращаются в Access-Control-Allow-Headers при preflight запросе.
+     */
+    @Test
+    fun testAllowedHeaders() {
+        corsProperties.origins.forEach { origin ->
+            val headerToTest = corsProperties.allowedHeaders.firstOrNull()?.takeIf { it != "*" } ?: "Content-Type"
+
+            mockMvc.options("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS, headerToTest)
+            }.andExpect {
+                status { isOk() }
+                header { exists(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS) }
+            }
+        }
+    }
+
+    /**
+     * Проверяет, что разрешенные методы возвращаются в Access-Control-Allow-Methods при preflight запросе.
+     */
+    @Test
+    fun testAllowedMethods() {
+        corsProperties.origins.forEach { origin ->
+            mockMvc.options("/ping") {
+                with(testSecurityContext())
+                header(HttpHeaders.ORIGIN, origin)
+                header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET")
+            }.andExpect {
+                status { isOk() }
+                header { exists(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS) }
             }
         }
     }

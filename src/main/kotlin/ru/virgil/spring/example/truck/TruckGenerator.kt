@@ -1,18 +1,16 @@
 package ru.virgil.spring.example.truck
 
-import org.jeasy.random.EasyRandom
+import org.instancio.Instancio
 import org.springframework.stereotype.Component
-import ru.virgil.spring.example.system.EasyRandomProvider
+import ru.virgil.spring.example.system.InstancioProvider
 
 @Component
 class TruckGenerator(
-    private val easyRandom: EasyRandom,
+    private val instancioProvider: InstancioProvider,
     override val repository: TruckGeneratorRepository,
-) : EasyRandomProvider.Generator<Truck> {
+) : InstancioProvider.Generator<Truck> {
 
-    override fun generate() = easyRandom.nextObject(Truck::class.java)
+    override fun generate(): Truck = Instancio.of(instancioProvider.createModel(Truck::class.java)).create()
 
-    override fun generate(count: Int) = easyRandom.objects(Truck::class.java, count).toList()
-
-    companion object : EasyRandomProvider.Parameters
+    override fun generate(count: Int): List<Truck> = (1..count).map { generate() }
 }

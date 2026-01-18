@@ -5,11 +5,9 @@ import org.springframework.security.access.prepost.PostAuthorize
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import ru.virgil.spring.example.truck.TruckService
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
-@GlobalCors
 @RestController
 @RequestMapping("/box")
 class BoxController(

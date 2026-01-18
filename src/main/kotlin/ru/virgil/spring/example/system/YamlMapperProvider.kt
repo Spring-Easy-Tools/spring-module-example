@@ -1,7 +1,6 @@
 package ru.virgil.spring.example.system
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import tools.jackson.dataformat.yaml.YAMLMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
@@ -9,5 +8,5 @@ import org.springframework.stereotype.Component
 class YamlMapperProvider {
 
     @Bean
-    fun provideYamlMapper(): YAMLMapper = YAMLMapper().registerModule(JavaTimeModule()) as YAMLMapper
+    fun provideYamlMapper(): YAMLMapper = YAMLMapper.builder().build()
 }

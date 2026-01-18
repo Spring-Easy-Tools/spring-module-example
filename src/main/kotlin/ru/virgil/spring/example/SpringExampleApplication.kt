@@ -5,11 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
 
 @SpringBootApplication(scanBasePackages = [BASE_PACKAGE])
 @EnableJpaAuditing
 @EnableScheduling
+@EnableJdbcHttpSession
 @ConfigurationPropertiesScan(BASE_PACKAGE)
 class SpringExampleApplication {
 

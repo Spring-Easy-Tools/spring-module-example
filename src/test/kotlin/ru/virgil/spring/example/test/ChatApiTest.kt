@@ -1,11 +1,12 @@
 package ru.virgil.spring.example.test
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.truth.Truth
+import tools.jackson.databind.ObjectMapper
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.messaging.Message
@@ -70,7 +71,7 @@ class ChatApiTest @Autowired constructor(
         subscribeHeaders.subscriptionId = "0"
         subscribeHeaders.destination = destination
         subscribeHeaders.sessionId = "0"
-        subscribeHeaders.user = authenticatedToken
+        subscribeHeaders.user = authenticatedToken!!
         subscribeHeaders.sessionAttributes = HashMap()
         val subscribeDto = ChatMessageDto("Subscribing message", authenticatedToken.name)
         val subscribeMessage = MessageBuilder.createMessage(
@@ -96,14 +97,14 @@ class ChatApiTest @Autowired constructor(
         val sendReply: Message<*> = brokerChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingAnnotation(objectMapper)
 
-        Truth.assertThat(sendReply).isNotNull()
-        Truth.assertThat(replyDto.text).isEqualTo(testingText)
-        Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
+        sendReply.shouldNotBeNull()
+        replyDto.text shouldBe testingText
+        replyDto.author shouldBe authenticatedToken.name
 
         val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
-        Truth.assertThat(chatMessage).isNotNull()
-        Truth.assertThat(chatMessage.text).isEqualTo(testingText)
-        Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
+        chatMessage.shouldNotBeNull()
+        chatMessage.text shouldBe testingText
+        chatMessage.author shouldBe authenticatedToken.name
     }
 
     @Test
@@ -116,7 +117,7 @@ class ChatApiTest @Autowired constructor(
 
         val authenticatedToken = Security.getAuthentication()
 
-        val destination = "/app/chat/send/${authenticatedToken.name}"
+        val destination = "/app/chat/send/${authenticatedToken!!.name}"
         val subscription = "/user/${authenticatedToken.name}/chat/my"
         val testingText = "STOMP User Chat Test"
 
@@ -150,13 +151,13 @@ class ChatApiTest @Autowired constructor(
         val sendReply: Message<*> = clientInboundChannelInterceptor.awaitForMessage(sendDto.text!!)
         val replyDto: ChatMessageDto = sendReply.deserializeFromMessagingTemplate(objectMapper)
 
-        Truth.assertThat(sendReply).isNotNull()
-        Truth.assertThat(replyDto.text).isEqualTo(testingText)
-        Truth.assertThat(replyDto.author).isEqualTo(authenticatedToken.name)
+        sendReply.shouldNotBeNull()
+        replyDto.text shouldBe testingText
+        replyDto.author shouldBe authenticatedToken.name
 
         val chatMessage = awaitResult { chatMessageRepository.findAll().find { it.text == testingText } }
-        Truth.assertThat(chatMessage).isNotNull()
-        Truth.assertThat(chatMessage.text).isEqualTo(testingText)
-        Truth.assertThat(chatMessage.author).isEqualTo(authenticatedToken.name)
+        chatMessage.shouldNotBeNull()
+        chatMessage.text shouldBe testingText
+        chatMessage.author shouldBe authenticatedToken.name
     }
 }

@@ -26,6 +26,7 @@ class UserSettingsService(
     fun create(): UserSettings {
         get().thenConflict()
         val authentication = Security.getAuthentication()
+            ?: throw SecurityException("No authentication found")
         val userSettings = when (authentication) {
             is OAuth2AuthenticationToken -> formOauthUserSettings(authentication)
             else -> formFallbackUserSettings(authentication)

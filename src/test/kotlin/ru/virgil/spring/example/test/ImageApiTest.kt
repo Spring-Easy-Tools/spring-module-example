@@ -7,18 +7,23 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import ru.virgil.spring.example.image.ImageMockService
 import ru.virgil.spring.example.image.ImageService
 import ru.virgil.spring.example.image.PrivateImageFileDto
 import ru.virgil.spring.example.roles.user.WithMockedUser
-import ru.virgil.spring.tools.image.FileTypeService
-import ru.virgil.spring.tools.testing.fluent.Fluent
 import ru.virgil.spring.tools.SpringToolsConfig.Companion.BASE_PACKAGE
+import ru.virgil.spring.tools.image.FileTypeService
+import ru.virgil.spring.tools.testing.MockMvcExtensions.Companion.fromJson
+import tools.jackson.databind.ObjectMapper
 import java.util.*
 
 @DirtiesContext
@@ -26,8 +31,10 @@ import java.util.*
 @ComponentScan(BASE_PACKAGE)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@WithMockedUser
 class ImageApiTest @Autowired constructor(
-    val fluent: Fluent,
+    val mockMvc: MockMvc,
+    val objectMapper: ObjectMapper,
     val imageMockService: ImageMockService,
     val imageService: ImageService,
     val fileTypeService: FileTypeService,
@@ -35,58 +42,75 @@ class ImageApiTest @Autowired constructor(
 
     private val imageMimeTypePattern = "image/"
 
-    @WithMockedUser
     @Test
     fun postPrivateImage() {
-        val privateImageFileDto: PrivateImageFileDto = fluent.request {
-            post { "/image/private" }
-            file { imageMockService.mockAsMultipart() }
-        }
+        val privateImageFileDto: PrivateImageFileDto = mockMvc.multipart("/image/private") {
+            with(testSecurityContext())
+            with(csrf())
+            file(imageMockService.mockAsMultipart())
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().fromJson()
         privateImageFileDto.shouldNotBeNull()
     }
 
-    @WithMockedUser
     @Test
     fun getPrivateImage() {
-        val privateImageFileDto: PrivateImageFileDto = fluent.request {
-            post { "/image/private" }
-            file { imageMockService.mockAsMultipart() }
-        }
+        val privateImageFileDto: PrivateImageFileDto = mockMvc.multipart("/image/private") {
+            with(testSecurityContext())
+            with(csrf())
+            file(imageMockService.mockAsMultipart())
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().fromJson()
         privateImageFileDto.shouldNotBeNull()
-        val byteArray: ByteArray = fluent.request { get { "/image/private/${privateImageFileDto.uuid}" } }
+        val byteArray: ByteArray = mockMvc.get("/image/private/${privateImageFileDto.uuid}") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsByteArray
         fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
-    @WithMockedUser
     @Test
     fun getProtectedImage() {
-        val byteArray: ByteArray = fluent.request { get { "/image/protected/image.jpg" } }
+        val byteArray: ByteArray = mockMvc.get("/image/protected/image.jpg") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsByteArray
         fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
     @Test
     fun getPublicImage() {
-        val byteArray: ByteArray = fluent.request { get { "/image/public/image.jpg" } }
+        val byteArray: ByteArray = mockMvc.get("/image/public/image.jpg") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsByteArray
         fileTypeService.getImageMimeType(byteArray) shouldContain imageMimeTypePattern
         byteArray.size.shouldNotBeZero()
     }
 
-    @WithMockedUser
     @Test
     fun getNotExisting() {
-        fluent.request<Any> {
-            get { "/image/public/not_existing.jpg" }
-            expect { status().isNotFound }
+        mockMvc.get("/image/public/not_existing.jpg") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isNotFound() }
         }
-        fluent.request<Any> {
-            get { "/image/protected/not_existing.jpg" }
-            expect { status().isNotFound }
+        mockMvc.get("/image/protected/not_existing.jpg") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isNotFound() }
         }
-        fluent.request<Any> {
-            get { "/protected/${UUID.randomUUID()}" }
-            expect { status().isNotFound }
+        mockMvc.get("/protected/${UUID.randomUUID()}") {
+            with(testSecurityContext())
+        }.andExpect {
+            status { isNotFound() }
         }
     }
 

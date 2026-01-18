@@ -1,43 +1,31 @@
 server:
-  error:
-    include-message: always
-    include-binding-errors: always
-    include-exception: true
-    include-stacktrace: always
   servlet:
-    encoding:
-      force: true
     session:
       timeout: 7d
 
 logging:
   level:
-    ru.virgil:
-      # Так удобнее регулировать логгирование тестов?
-      spring.example.test: DEBUG
-    org:
-      springframework.web.socket: DEBUG
-      # Также см. SecurityConfig@EnableWebSecurity(debug = true) для подробной отладки безопасности
-      springframework.security: DEBUG
-      zalando.logbook: DEBUG
-      web.cors: DEBUG
-      session: DEBUG
+    ru.virgil: INFO
+    org.springframework: INFO
 
 spring:
+  profiles: # H2 and Postgres configs are in separate config files
+    active: h2
   config:
     import: optional:classpath:credentials/credentials.yaml
+  servlet:
+    encoding:
+      force: true
   output:
     ansi:
       enabled: always
-  session:
-    jdbc:
-      initialize-schema: always
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+      include-exception: true
+      include-stacktrace: always
   security: # credentials are in resources/credentials/credentials.yaml
-  datasource:
-#    url: jdbc:postgresql://localhost:5432/postgres
-    url: jdbc:h2:mem:default
-    username: postgres
-    password: af15be37-f9dd-4418-b219-19559fc31bff
   jpa:
     generate-ddl: true
     hibernate:

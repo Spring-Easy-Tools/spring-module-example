@@ -11,11 +11,9 @@ import org.springframework.messaging.support.GenericMessage
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
 import ru.virgil.spring.tools.security.Security.getCreator
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orBadRequest
 import ru.virgil.spring.tools.util.logging.Logger
 
-@GlobalCors
 @Controller
 class ChatController(
     private val faker: Faker,

@@ -1,6 +1,6 @@
 package ru.virgil.spring.example.stats
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import tools.jackson.dataformat.yaml.YAMLMapper
 import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,7 +29,7 @@ class StatsSiteController(
     fun isAuthenticated() = Security.getAuthentication() is AnonymousAuthenticationToken
 
     @ModelAttribute("auth_type")
-    fun getAuthType(): String = Security.getAuthentication().javaClass.simpleName
+    fun getAuthType(): String = Security.getAuthentication()?.javaClass?.simpleName ?: "None"
 
     @ModelAttribute("all_stats")
     fun getAllStats() = statsService.getAllStats().toString()

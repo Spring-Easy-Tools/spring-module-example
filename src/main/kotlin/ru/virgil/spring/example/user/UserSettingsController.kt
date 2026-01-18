@@ -1,10 +1,8 @@
 package ru.virgil.spring.example.user
 
 import org.springframework.web.bind.annotation.*
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orNotFound
 
-@GlobalCors
 @RestController
 @RequestMapping("/user_settings")
 class UserSettingsController(

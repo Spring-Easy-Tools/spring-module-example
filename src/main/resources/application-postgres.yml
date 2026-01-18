@@ -1,0 +1,9 @@
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:org/springframework/session/jdbc/schema-postgresql.sql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: af15be37-f9dd-4418-b219-19559fc31bff

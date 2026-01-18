@@ -5,11 +5,9 @@ import ru.virgil.spring.example.box.BoxService
 import ru.virgil.spring.example.truck.TruckDto
 import ru.virgil.spring.example.truck.TruckMapper
 import ru.virgil.spring.example.truck.TruckService
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http.orNotFound
 import java.util.*
 
-@GlobalCors
 @RestController
 @RequestMapping("/buying_order")
 class BuyingOrderController(

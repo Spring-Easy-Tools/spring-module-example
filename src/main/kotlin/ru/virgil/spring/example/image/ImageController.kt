@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import ru.virgil.spring.tools.image.FileTypeService
 import ru.virgil.spring.tools.security.Security.getCreator
-import ru.virgil.spring.tools.security.cors.GlobalCors
 import ru.virgil.spring.tools.util.Http
 import java.io.FileNotFoundException
 import java.nio.file.Paths
 import java.util.*
 
-@GlobalCors
 @RestController
 @RequestMapping("/image")
 class ImageController(
